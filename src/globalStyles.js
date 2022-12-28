@@ -14,6 +14,7 @@ body{
     overflow-x: hidden;
     font-family: 'Source Sans Pro',sans-serif;
     background: ${({ theme }) => theme.body};
+    transition: background 0.2s ease-in, color 0.2s ease-in;
 }
 `;
 export const lightTheme = {
