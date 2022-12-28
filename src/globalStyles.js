@@ -9,11 +9,19 @@ h1,h2,h3,h4,h5,h6{
     display: inline-block;
 }
 body{
-    margin: 0;
+    margin: 0 ;
     padding: 0;
     overflow-x: hidden;
     font-family: 'Source Sans Pro',sans-serif;
+    background: ${({ theme }) => theme.body};
 }
 `;
+export const lightTheme = {
+  body: "#FCF6F4"
+};
+
+export const DarkTheme = {
+  body: "#000000"
+};
 
 export default GlobalStyle;

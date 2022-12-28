@@ -3,10 +3,9 @@ import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
 
 const MainContainer = styled.div`
-  background: ${(props) => props.theme.body};
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
+  width: 80vw;
+  margin: 0 auto;
+  height: fit-content;
   position: relative;
   h2,
   h3,
@@ -15,16 +14,22 @@ const MainContainer = styled.div`
   h6 {
     font-family: "Karla", sans-serif;
     font-weight: 500;
+    color: ${(props) => props.theme.text};
   }
 `;
-
-const Main = () => {
+const Header = styled.div`
+  width: 80vw;
+  height: fit-content;
+  position: relative;
+`;
+const Main = (props) => {
   const [click, setClick] = useState(false);
   const handleClick = () => setClick(!click);
 
   return (
     <MainContainer>
-      <h1>123</h1>
+      <Header></Header>
+      <h2>123</h2>
     </MainContainer>
   );
 };
