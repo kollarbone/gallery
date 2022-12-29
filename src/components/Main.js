@@ -8,6 +8,7 @@ import axios from "axios";
 
 const MainContainer = styled.div`
   max-width: 1150px;
+  min-width: 300px;
   width: 70vw;
   margin: 0 auto;
   height: fit-content;
