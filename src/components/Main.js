@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Logo from "./svg/logo";
 import { BsSunFill } from "react-icons/bs";
 import { BsCaretDownFill } from "react-icons/bs";
+import MyComponent from "fwt-internship-uikit";
 
 const MainContainer = styled.div`
   width: 80vw;
@@ -58,6 +59,13 @@ const FilterContainer = styled.div`
     margin-bottom: 15px;
   }
 `;
+const MainBlock = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+`;
 const Main = (props) => {
   return (
     <MainContainer>
@@ -85,6 +93,9 @@ const Main = (props) => {
           </div>
         </FilterContainer>
       </Header>
+      <MainBlock>
+        <MyComponent />
+      </MainBlock>
     </MainContainer>
   );
 };
