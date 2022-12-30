@@ -2,7 +2,13 @@ import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
 import { motion } from "framer-motion";
 import Logo from "./svg/logo";
-import { BsSunFill } from "react-icons/bs";
+import {
+  BsSunFill,
+  BsChevronLeft,
+  BsChevronRight,
+  BsChevronDoubleLeft,
+  BsChevronDoubleRight
+} from "react-icons/bs";
 import { BsCaretDownFill } from "react-icons/bs";
 import axios from "axios";
 
@@ -81,7 +87,7 @@ const NameArt = styled.div`
   div {
     position: inherit;
     background: rgba(255, 255, 255, 0.75);
-    bottom: 54px;
+    bottom: 40px;
     display: flex;
     min-height: 30px;
     align-items: center;
@@ -92,6 +98,10 @@ const NameArt = styled.div`
   }
   h3 {
     margin-left: 15px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-right: 15px;
   }
   img {
     max-width: 360px;
@@ -101,20 +111,89 @@ const NameArt = styled.div`
     min-height: 205px;
     margin: 10px;
     width: 100vw;
+    height: 100vw;
+  }
+`;
+const Paggination = styled.div`
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin-bottom: 50px;
+  margin-left: 20px;
+  cursor: pointer;
+  li {
+    padding: 10px;
+    border: 1px solid ${(props) => props.theme.text};
+    height: 20px;
+    text-align: center;
+    width: 20px;
+    color: ${(props) => props.theme.text};
+  }
+  .active {
+    background-color: ${(props) => props.theme.text};
+    color: ${(props) => props.theme.body};
+    transition: all 0.2s ease-in, color 0.2s ease-in;
+  }
+  button {
+    background: none;
+    padding: 10px;
+    border: 1px solid ${(props) => props.theme.text};
+    height: 42px;
+    text-align: center;
+    width: 41px;
+    color: ${(props) => props.theme.text};
   }
 `;
 const Main = (props) => {
   const [data, setData] = useState(null);
+  const currentData = (data) => {
+    return data.map((i, index) => {
+      return (
+        <NameArt key={index}>
+          <img src={url + i.imageUrl} alt="" />
+          <div>
+            <h3>{i.name}</h3>
+          </div>
+        </NameArt>
+      );
+    });
+  };
+  const [currentPage, setCurrentPage] = useState(1);
+  const pages = [];
+  for (let i = 1; i <= 4; i++) {
+    pages.push(i);
+  }
+  const handleClick = (event) => {
+    setCurrentPage(Math.ceil(event.target.id));
+  };
+  const [pageNumberLimit, setNumberLimit] = useState(4);
+  const [maxPageNumberLimit, setMaxNumberLimit] = useState(4);
+  const [minPageNumberLimit, setMinNumberLimit] = useState(0);
+
+  const renderPageNumbers = pages.map((number) => {
+    if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
+      return (
+        <li
+          key={number}
+          id={number}
+          onClick={handleClick}
+          className={currentPage == number ? "active" : null}
+        >
+          {number}
+        </li>
+      );
+    } else {
+      return null;
+    }
+  });
   useEffect(() => {
     axios
-      .get(
-        "https://api.harvardartmuseums.org/image?apikey=4da66dff-e03c-46a3-ac5e-e3fc8e071996&page=" +
-          "1"
-      )
+      .get("https://test-front.framework.team/paintings?_page=" + [currentPage])
       .then((response) => {
         setData(response.data);
       });
-  }, []);
+  });
+  const url = "https://test-front.framework.team";
 
   return (
     <MainContainer>
@@ -142,21 +221,30 @@ const Main = (props) => {
           </div>
         </FilterContainer>
       </Header>
-      <MainBlock>
-        {data &&
-          data.records.map((i) => {
-            return (
-              <NameArt>
-                <img src={i.baseimageurl} />
-                {i.copyright && (
-                  <div>
-                    <h3>{i.copyright}</h3>
-                  </div>
-                )}
-              </NameArt>
-            );
-          })}
-      </MainBlock>
+      <MainBlock>{data && currentData(data)}</MainBlock>
+      <Paggination>
+        <button>
+          <BsChevronDoubleLeft
+            style={{ color: props.theme.text, cursor: "pointer" }}
+          />
+        </button>
+        <button>
+          <BsChevronLeft
+            style={{ color: props.theme.text, cursor: "pointer" }}
+          />
+        </button>
+        {renderPageNumbers}
+        <button>
+          <BsChevronRight
+            style={{ color: props.theme.text, cursor: "pointer" }}
+          />
+        </button>
+        <button>
+          <BsChevronDoubleRight
+            style={{ color: props.theme.text, cursor: "pointer" }}
+          />
+        </button>
+      </Paggination>
     </MainContainer>
   );
 };
