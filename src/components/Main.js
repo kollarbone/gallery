@@ -177,6 +177,10 @@ const Paggination = styled.div`
     color: ${(props) => props.theme.body};
     transition: all 0.2s ease-in-out;
   }
+  .active:hover {
+    background-color: ${(props) => props.theme.text};
+    color: ${(props) => props.theme.body};
+  }
   button {
     background: none;
     padding: 10px;
@@ -187,7 +191,11 @@ const Paggination = styled.div`
     color: ${(props) => props.theme.text};
   }
   li:hover {
-    background: ${(props) => props.theme.textRgba};
+    background-color: ${(props) => props.theme.textRgba};
+    transition: all 0.2s ease-in-out;
+  }
+  button:hover {
+    background-color: ${(props) => props.theme.textRgba};
     transition: all 0.2s ease-in-out;
   }
   .first {
@@ -195,6 +203,12 @@ const Paggination = styled.div`
   }
   .last {
     border: 1px solid ${(props) => props.theme.textRgba};
+  }
+  .first:hover {
+    background-color: ${(props) => props.theme.body};
+  }
+  .last:hover {
+    background-color: ${(props) => props.theme.body};
   }
 `;
 const Main = (props) => {
