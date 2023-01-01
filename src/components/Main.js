@@ -203,11 +203,11 @@ const Main = (props) => {
             <h3>{i.name}</h3>
             <span>
               <h4>Author:</h4>{" "}
-              {autor.map((autor) => {
-                if (autor.id === i.authorId) {
-                  return autor.name;
-                }
-              })}
+//               {autor.map((autor) => {
+//                 if (autor.id === i.authorId) {
+//                   return autor.name;
+//                 }
+//               })}
             </span>
             <span>
               <h4>Created:</h4> {i.created}
@@ -260,12 +260,10 @@ const Main = (props) => {
       .then((response) => {
         setData(response.data);
       });
-    axios.get("https://test-front.framework.team/authors").then((response) => {
-      setAutor(response.data);
-    });
-    axios.get("https://test-front.framework.team/authors").then((response) => {
-      setAutor(response.data);
-    });
+//     axios.get("https://test-front.framework.team/authors").then((response) => {
+//       setAutor(response.data);
+//     });
+    
   });
   const imageUrl = "https://test-front.framework.team";
 
