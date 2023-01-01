@@ -33,7 +33,7 @@ const MainContainer = styled.div`
   }
 `;
 const Header = styled.div`
-  margin-top: 35px;
+  margin-top: 30px;
   height: fit-content;
   display: flex;
   flex-direction: column;
@@ -73,7 +73,7 @@ const MainBlock = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  margin-bottom: 35px;
+  margin-bottom: 20px;
   flex-wrap: wrap;
   justify-content: center;
   width: 100%;
@@ -118,7 +118,7 @@ const Paggination = styled.div`
   list-style: none;
   display: flex;
   align-items: center;
-  margin-bottom: 50px;
+  margin-bottom: 10px;
   margin-left: 20px;
   cursor: pointer;
   li {
@@ -160,14 +160,14 @@ const Main = (props) => {
   };
   const [currentPage, setCurrentPage] = useState(1);
   const pages = [];
-  for (let i = 1; i <= 4; i++) {
+  for (let i = 1; i <= 6; i++) {
     pages.push(i);
   }
   const handleClick = (event) => {
     setCurrentPage(Math.ceil(event.target.id));
   };
-  const [pageNumberLimit, setNumberLimit] = useState(4);
-  const [maxPageNumberLimit, setMaxNumberLimit] = useState(4);
+  const [pageNumberLimit, setNumberLimit] = useState(6);
+  const [maxPageNumberLimit, setMaxNumberLimit] = useState(6);
   const [minPageNumberLimit, setMinNumberLimit] = useState(0);
 
   const renderPageNumbers = pages.map((number) => {
@@ -188,7 +188,11 @@ const Main = (props) => {
   });
   useEffect(() => {
     axios
-      .get("https://test-front.framework.team/paintings?_page=" + [currentPage])
+      .get(
+        "https://test-front.framework.team/paintings?_page=" +
+          [currentPage] +
+          "&_limit=6"
+      )
       .then((response) => {
         setData(response.data);
       });
