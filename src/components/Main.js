@@ -84,25 +84,65 @@ const NameArt = styled.div`
   align-items: center;
   justify-content: center;
   position: relative;
-  div {
-    position: inherit;
+  cursor: pointer;
+  .hide {
+    position: absolute;
     background: rgba(255, 255, 255, 0.75);
-    bottom: 40px;
+    bottom: 10px;
     display: flex;
+    flex-direction: column;
     min-height: 30px;
-    align-items: center;
+    align-items: flex-start;
     max-width: 360px;
     min-width: 280px;
+    height: 30px;
     width: 100vw;
     border-radius: 0px 0px 20px 20px;
+    justify-content: center;
+    transition: all 0.2s ease-in-out;
+    h4 {
+      visibility: hidden;
+      display: none;
+    }
+    span {
+      visibility: hidden;
+      display: none;
+    }
+    h3 {
+      margin-left: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-right: 15px;
+    }
   }
-  h3 {
-    margin-left: 15px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    margin-right: 15px;
+  .hide:hover {
+    height: 145px;
+    bottom: 10px;
+    transition: all 0.2s ease-in-out;
+    h4 {
+      display: flex;
+      visibility: visible;
+      font-weight: 600;
+      margin-left: 15px;
+      margin-bottom: 5px;
+    }
+    span {
+      visibility: visible;
+      font-weight: 300;
+      font-size: 13px;
+      display: flex;
+    }
+    h3 {
+      margin-left: 15px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      margin-right: 15px;
+      margin-bottom: 5px;
+    }
   }
+
   img {
     max-width: 360px;
     border-radius: 20px;
@@ -143,16 +183,38 @@ const Paggination = styled.div`
     width: 41px;
     color: ${(props) => props.theme.text};
   }
+  .first {
+    border: 1px solid ${(props) => props.theme.textRgba};
+  }
+  .last {
+    border: 1px solid ${(props) => props.theme.textRgba};
+  }
 `;
 const Main = (props) => {
   const [data, setData] = useState(null);
+  const [autor, setAutor] = useState(null);
+
   const currentData = (data) => {
     return data.map((i, index) => {
       return (
         <NameArt key={index}>
-          <img src={url + i.imageUrl} alt="" />
-          <div>
+          <img src={imageUrl + i.imageUrl} alt="" />
+          <div className="hide">
             <h3>{i.name}</h3>
+            <span>
+              <h4>Author:</h4>{" "}
+              {autor.map((autor) => {
+                if (autor.id === i.authorId) {
+                  return autor.name;
+                }
+              })}
+            </span>
+            <span>
+              <h4>Created:</h4> {i.created}
+            </span>
+            <span>
+              <h4>Location:</h4> {i.locationId}
+            </span>
           </div>
         </NameArt>
       );
@@ -169,7 +231,9 @@ const Main = (props) => {
   const [pageNumberLimit, setNumberLimit] = useState(6);
   const [maxPageNumberLimit, setMaxNumberLimit] = useState(6);
   const [minPageNumberLimit, setMinNumberLimit] = useState(0);
-
+  const handlePage = (page) => {
+    setCurrentPage(page);
+  };
   const renderPageNumbers = pages.map((number) => {
     if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
       return (
@@ -196,8 +260,14 @@ const Main = (props) => {
       .then((response) => {
         setData(response.data);
       });
+    axios.get("https://test-front.framework.team/authors").then((response) => {
+      setAutor(response.data);
+    });
+    axios.get("https://test-front.framework.team/authors").then((response) => {
+      setAutor(response.data);
+    });
   });
-  const url = "https://test-front.framework.team";
+  const imageUrl = "https://test-front.framework.team";
 
   return (
     <MainContainer>
@@ -227,25 +297,63 @@ const Main = (props) => {
       </Header>
       <MainBlock>{data && currentData(data)}</MainBlock>
       <Paggination>
-        <button>
+        <button
+          onClick={() => handlePage(1)}
+          className={currentPage === 1 ? "first" : ""}
+          style={{ borderRadius: "10px 0px 0px 10px" }}
+        >
           <BsChevronDoubleLeft
-            style={{ color: props.theme.text, cursor: "pointer" }}
+            style={
+              currentPage === 1
+                ? {
+                    color: props.theme.textRgba
+                  }
+                : { color: props.theme.text, cursor: "pointer" }
+            }
           />
         </button>
-        <button>
+        <button
+          onClick={() => handlePage(currentPage - 1)}
+          className={currentPage === 1 ? "first" : ""}
+        >
           <BsChevronLeft
-            style={{ color: props.theme.text, cursor: "pointer" }}
+            style={
+              currentPage === 1
+                ? {
+                    color: props.theme.textRgba
+                  }
+                : { color: props.theme.text, cursor: "pointer" }
+            }
           />
         </button>
         {renderPageNumbers}
-        <button>
+        <button
+          onClick={() => handlePage(currentPage + 1)}
+          className={currentPage === pageNumberLimit ? "last" : ""}
+        >
           <BsChevronRight
-            style={{ color: props.theme.text, cursor: "pointer" }}
+            style={
+              currentPage === pageNumberLimit
+                ? {
+                    color: props.theme.textRgba
+                  }
+                : { color: props.theme.text, cursor: "pointer" }
+            }
           />
         </button>
-        <button>
+        <button
+          onClick={() => handlePage(pageNumberLimit)}
+          className={currentPage === pageNumberLimit ? "last" : ""}
+          style={{ borderRadius: "0px 10px 10px 0px" }}
+        >
           <BsChevronDoubleRight
-            style={{ color: props.theme.text, cursor: "pointer" }}
+            style={
+              currentPage === pageNumberLimit
+                ? {
+                    color: props.theme.textRgba
+                  }
+                : { color: props.theme.text, cursor: "pointer" }
+            }
           />
         </button>
       </Paggination>
