@@ -126,6 +126,8 @@ const NameArt = styled.div`
       font-weight: 600;
       margin-left: 15px;
       margin-bottom: 5px;
+      margin-right: 5px;
+      color: #000;
     }
     span {
       visibility: visible;
@@ -161,6 +163,7 @@ const Paggination = styled.div`
   margin-bottom: 10px;
   margin-left: 20px;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
   li {
     padding: 10px;
     border: 1px solid ${(props) => props.theme.text};
@@ -172,7 +175,7 @@ const Paggination = styled.div`
   .active {
     background-color: ${(props) => props.theme.text};
     color: ${(props) => props.theme.body};
-    transition: all 0.2s ease-in, color 0.2s ease-in;
+    transition: all 0.2s ease-in-out;
   }
   button {
     background: none;
@@ -183,6 +186,10 @@ const Paggination = styled.div`
     width: 41px;
     color: ${(props) => props.theme.text};
   }
+  li:hover {
+    background: ${(props) => props.theme.textRgba};
+    transition: all 0.2s ease-in-out;
+  }
   .first {
     border: 1px solid ${(props) => props.theme.textRgba};
   }
@@ -192,7 +199,6 @@ const Paggination = styled.div`
 `;
 const Main = (props) => {
   const [data, setData] = useState(null);
-  const [autor, setAutor] = useState(null);
 
   const currentData = (data) => {
     return data.map((i, index) => {
@@ -202,18 +208,23 @@ const Main = (props) => {
           <div className="hide">
             <h3>{i.name}</h3>
             <span>
-              <h4>Author:</h4>{" "}
-//               {autor.map((autor) => {
-//                 if (autor.id === i.authorId) {
-//                   return autor.name;
-//                 }
-//               })}
+              <h4>Author: </h4>
+              {props.autor.autor.map((a) => {
+                if (a.id === i.authorId) {
+                  return a.name;
+                }
+              })}
             </span>
             <span>
-              <h4>Created:</h4> {i.created}
+              <h4>Created: </h4> {i.created}
             </span>
             <span>
-              <h4>Location:</h4> {i.locationId}
+              <h4>Location: </h4>{" "}
+              {props.autor.location.map((a) => {
+                if (a.id === i.locationId) {
+                  return a.location;
+                }
+              })}
             </span>
           </div>
         </NameArt>
@@ -260,10 +271,6 @@ const Main = (props) => {
       .then((response) => {
         setData(response.data);
       });
-//     axios.get("https://test-front.framework.team/authors").then((response) => {
-//       setAutor(response.data);
-//     });
-    
   });
   const imageUrl = "https://test-front.framework.team";
 
