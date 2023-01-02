@@ -144,7 +144,6 @@ const NameArt = styled.div`
       margin-bottom: 5px;
     }
   }
-
   img {
     max-width: 360px;
     border-radius: 20px;
@@ -152,8 +151,42 @@ const NameArt = styled.div`
     min-width: 280px;
     min-height: 205px;
     margin: 10px;
-    width: 100vw;
-    height: 100vw;
+  }
+  @media (min-width: 1024px) {
+    img {
+      width: 100vw;
+      height: 275px;
+    }
+    .hide {
+      width: 100vw;
+    }
+  }
+  @media (max-width: 1086px) and (min-width: 768px) {
+    img {
+      width: 300px;
+      height: 230px;
+    }
+    .hide {
+      width: 300px;
+    }
+  }
+  @media (max-width: 768px) and (min-width: 320px) {
+    img {
+      width: 340px;
+      height: 250px;
+    }
+    .hide {
+      width: 340px;
+    }
+  }
+  @media (max-width: 320px) {
+    img {
+      width: 280px;
+      height: 205px;
+    }
+    .hide {
+      width: 280px;
+    }
   }
 `;
 const Paggination = styled.div`
