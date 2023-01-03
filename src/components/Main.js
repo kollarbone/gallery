@@ -115,6 +115,9 @@ const NameArt = styled.div`
   cursor: pointer;
   .hide {
     position: absolute;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
     background: rgba(255, 255, 255, 0.75);
     bottom: 10px;
     display: flex;
@@ -165,14 +168,13 @@ const NameArt = styled.div`
     }
     h3 {
       margin-left: 15px;
-      white-space: nowrap;
+      white-space: normal;
       overflow: hidden;
       text-overflow: ellipsis;
       margin-right: 15px;
       margin-bottom: 5px;
     }
   }
-
   img {
     max-width: 360px;
     border-radius: 20px;
@@ -241,7 +243,6 @@ const Paggination = styled.div`
 `;
 const Main = (props) => {
   const [data, setData] = useState(null);
-
   const currentData = (data) => {
     return data.map((i, index) => {
       return (
@@ -281,8 +282,8 @@ const Main = (props) => {
   const handleClick = (event) => {
     setCurrentPage(Math.ceil(event.target.id));
   };
-  const [pageNumberLimit, setNumberLimit] = useState(6);
-  const [maxPageNumberLimit, setMaxNumberLimit] = useState(6);
+  const [pageNumberLimit, setNumberLimit] = useState(3);
+  const [maxPageNumberLimit, setMaxNumberLimit] = useState(3);
   const [minPageNumberLimit, setMinNumberLimit] = useState(0);
   const handlePage = (page) => {
     setCurrentPage(page);
@@ -294,7 +295,7 @@ const Main = (props) => {
           key={number}
           id={number}
           onClick={handleClick}
-          className={currentPage == number ? "active" : null}
+          className={currentPage === number ? "active" : null}
         >
           {number}
         </li>
@@ -308,14 +309,48 @@ const Main = (props) => {
       .get(
         "https://test-front.framework.team/paintings?_page=" +
           [currentPage] +
-          "&_limit=6"
+          "&_limit=12"
       )
       .then((response) => {
         setData(response.data);
       });
   });
   const imageUrl = "https://test-front.framework.team";
-
+  const [valueSearchName, setValueSearchName] = useState("");
+  const searchData = (data) => {
+    const filteredCharacters = data.filter((i) => {
+      return i.name.toLowerCase().includes(valueSearchName.toLowerCase());
+    });
+    return filteredCharacters.map((i, index) => {
+      return (
+        <NameArt key={index}>
+          <img src={imageUrl + i.imageUrl} alt="" />
+          <div className="hide">
+            <h3>{i.name}</h3>
+            <span>
+              <h4>Author: </h4>
+              {props.autor.autor.map((a) => {
+                if (a.id === i.authorId) {
+                  return a.name;
+                }
+              })}
+            </span>
+            <span>
+              <h4>Created: </h4> {i.created}
+            </span>
+            <span>
+              <h4>Location: </h4>
+              {props.autor.location.map((a) => {
+                if (a.id === i.locationId) {
+                  return a.location;
+                }
+              })}
+            </span>
+          </div>
+        </NameArt>
+      );
+    });
+  };
   return (
     <MainContainer>
       <Header>
@@ -327,7 +362,10 @@ const Main = (props) => {
           />
         </LogoContainer>
         <FilterContainer>
-          <input placeholder="Name" />
+          <input
+            placeholder="Name"
+            onChange={(event) => setValueSearchName(event.target.value)}
+          />
           <div>
             <h5>Author</h5>
             <BsCaretDownFill color={props.theme.textRgba} />
@@ -342,7 +380,9 @@ const Main = (props) => {
           </div>
         </FilterContainer>
       </Header>
-      <MainBlock>{data && currentData(data)}</MainBlock>
+      <MainBlock>
+        {valueSearchName ? searchData(data) : data && currentData(data)}
+      </MainBlock>
       <Paggination>
         <button
           onClick={() => handlePage(1)}
