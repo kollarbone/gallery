@@ -59,8 +59,10 @@ const FilterContainer = styled.div`
   display: flex;
   flex-direction: row;
   align-items: center;
-  div,
+  .FilterContainer,
   input {
+    position: relative;
+    cursor: pointer;
     min-width: 150px;
     max-width: 280px;
     width: 100%;
@@ -75,6 +77,8 @@ const FilterContainer = styled.div`
     margin-bottom: 15px;
     margin-left: 10px;
     margin-right: 10px;
+    flex-wrap: wrap;
+    transition: all 0.2s ease-in-out;
     :first-child {
       margin-left: 0px;
     }
@@ -85,7 +89,7 @@ const FilterContainer = styled.div`
   @media (max-width: 790px) {
     justify-content: center;
     flex-direction: column;
-    div,
+    .FilterContainer,
     input {
       width: 280px;
       :first-child {
@@ -243,8 +247,32 @@ const Paggination = styled.div`
   }
 `;
 const DropdownMenuList = styled.div`
-  display: flex;
-  flex-direction: column;
+  transition: all 0.2s ease-in-out;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100%;
+  z-index: 1;
+  left: 0px;
+  right: 0px;
+  top: 44px;
+  background: ${(props) => props.theme.body};
+  border: 1px solid ${(props) => props.theme.bodyRgba};
+  border-radius: 8px;
+  overflow: auto;
+  max-height: 205px;
+`;
+const List = styled.div`
+  white-space: nowrap;
+  color: ${(props) => props.theme.text};
+  overflow: hidden;
+  text-overflow: ellipsis;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  margin-top: 20px;
+  margin-left: 30px;
+  :last-child {
+    margin-bottom: 25px;
+  }
 `;
 const Main = (props) => {
   const [data, setData] = useState(null);
@@ -309,6 +337,8 @@ const Main = (props) => {
       return null;
     }
   });
+  const [autorSearch, setAutorSearch] = useState([]);
+
   useEffect(() => {
     axios
       .get(
@@ -319,7 +349,13 @@ const Main = (props) => {
       .then((response) => {
         setData(response.data);
       });
-  });
+
+    axios.get("https://test-front.framework.team/authors").then((response) => {
+      setAutorSearch(response.data);
+    });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   const imageUrl = "https://test-front.framework.team";
   const [valueSearchName, setValueSearchName] = useState("");
   const searchData = (data) => {
@@ -356,19 +392,20 @@ const Main = (props) => {
       );
     });
   };
-  const autorSearch = props.autor.autor;
+
   const locationSearch = props.autor.location;
   const [isActive, setIsActive] = useState(false);
   const [selectedAutor, setSelectedAutor] = useState("");
   const DropdownMenu = () => {
     return (
-      <DropdownMenuList>
-        {autorSearch.map((autor) => {
-          return <span>{autor.name}</span>;
+      <DropdownMenuList className="DropdownMenuList">
+        {autorSearch.map((autor, index) => {
+          return <List key={index}>{autor.name}</List>;
         })}
       </DropdownMenuList>
     );
   };
+
   return (
     <MainContainer>
       <Header>
@@ -384,14 +421,18 @@ const Main = (props) => {
             placeholder="Name"
             onChange={(event) => setValueSearchName(event.target.value)}
           />
-          <div onClick={(e) => setIsActive(!isActive)}>
-            {selectedAutor ? { selectedAutor } : <h5>Author</h5>}
 
+          <div
+            onClick={(e) => setIsActive(!isActive)}
+            className="FilterContainer"
+          >
+            {selectedAutor ? { selectedAutor } : <h5>Author</h5>}
             {isActive === true ? (
               <BsCaretUpFill color={props.theme.textRgba} />
             ) : (
               <BsCaretDownFill color={props.theme.textRgba} />
             )}
+
             {isActive && (
               <DropdownMenu
                 selected={selectedAutor}
@@ -400,11 +441,11 @@ const Main = (props) => {
               />
             )}
           </div>
-          <div>
+          <div className="FilterContainer">
             <h5>Location</h5>
             <BsCaretDownFill color={props.theme.textRgba} />
           </div>
-          <div>
+          <div className="FilterContainer">
             <h5>Created</h5>
             <BsCaretDownFill color={props.theme.textRgba} />
           </div>
