@@ -9,7 +9,7 @@ import {
   BsChevronDoubleLeft,
   BsChevronDoubleRight
 } from "react-icons/bs";
-import { BsCaretDownFill } from "react-icons/bs";
+import { BsCaretDownFill, BsCaretUpFill } from "react-icons/bs";
 import axios from "axios";
 
 const MainContainer = styled.div`
@@ -113,6 +113,7 @@ const NameArt = styled.div`
   justify-content: center;
   position: relative;
   cursor: pointer;
+  transition: all 0.2s ease-in-out;
   .hide {
     position: absolute;
     white-space: nowrap;
@@ -241,6 +242,10 @@ const Paggination = styled.div`
     background-color: ${(props) => props.theme.body};
   }
 `;
+const DropdownMenuList = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 const Main = (props) => {
   const [data, setData] = useState(null);
   const currentData = (data) => {
@@ -351,6 +356,19 @@ const Main = (props) => {
       );
     });
   };
+  const autorSearch = props.autor.autor;
+  const locationSearch = props.autor.location;
+  const [isActive, setIsActive] = useState(false);
+  const [selectedAutor, setSelectedAutor] = useState("");
+  const DropdownMenu = () => {
+    return (
+      <DropdownMenuList>
+        {autorSearch.map((autor) => {
+          return <span>{autor.name}</span>;
+        })}
+      </DropdownMenuList>
+    );
+  };
   return (
     <MainContainer>
       <Header>
@@ -366,16 +384,28 @@ const Main = (props) => {
             placeholder="Name"
             onChange={(event) => setValueSearchName(event.target.value)}
           />
-          <div>
-            <h5>Author</h5>
-            <BsCaretDownFill color={props.theme.textRgba} />
+          <div onClick={(e) => setIsActive(!isActive)}>
+            {selectedAutor ? { selectedAutor } : <h5>Author</h5>}
+
+            {isActive === true ? (
+              <BsCaretUpFill color={props.theme.textRgba} />
+            ) : (
+              <BsCaretDownFill color={props.theme.textRgba} />
+            )}
+            {isActive && (
+              <DropdownMenu
+                selected={selectedAutor}
+                setSelected={setSelectedAutor}
+                setIsActive={setIsActive}
+              />
+            )}
           </div>
           <div>
             <h5>Location</h5>
             <BsCaretDownFill color={props.theme.textRgba} />
           </div>
           <div>
-            <h5>Location</h5>
+            <h5>Created</h5>
             <BsCaretDownFill color={props.theme.textRgba} />
           </div>
         </FilterContainer>
