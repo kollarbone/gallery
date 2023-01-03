@@ -13,12 +13,16 @@ import { BsCaretDownFill } from "react-icons/bs";
 import axios from "axios";
 
 const MainContainer = styled.div`
-  max-width: 1150px;
+  max-width: 1160px;
   min-width: 300px;
-  width: 70vw;
-  margin: 0 auto;
+  margin-left: auto;
+  margin-right: auto;
   height: fit-content;
   position: relative;
+  display: grid;
+  grid-template-columns: 1;
+  grid-template-rows: 3;
+
   h2,
   h4,
   h5,
@@ -31,6 +35,9 @@ const MainContainer = styled.div`
     font-weight: 700;
     font-family: "Karla", sans-serif;
   }
+  @media (max-width: 790px) {
+    justify-items: center;
+  }
 `;
 const Header = styled.div`
   margin-top: 30px;
@@ -38,6 +45,7 @@ const Header = styled.div`
   display: flex;
   flex-direction: column;
   margin-bottom: 30px;
+  justify-content: center;
 `;
 
 const LogoContainer = styled.div`
@@ -53,9 +61,9 @@ const FilterContainer = styled.div`
   align-items: center;
   div,
   input {
-    min-width: 160px;
-    max-width: 265px;
-    width: 15vw;
+    min-width: 150px;
+    max-width: 280px;
+    width: 100%;
     border: 1px solid ${(props) => props.theme.bodyRgba};
     border-radius: 8px;
     padding: 14px;
@@ -67,6 +75,26 @@ const FilterContainer = styled.div`
     margin-bottom: 15px;
     margin-left: 10px;
     margin-right: 10px;
+    :first-child {
+      margin-left: 0px;
+    }
+    :last-child {
+      margin-right: 0px;
+    }
+  }
+  @media (max-width: 790px) {
+    justify-content: center;
+    flex-direction: column;
+    div,
+    input {
+      width: 280px;
+      :first-child {
+        margin-left: 10px;
+      }
+      :last-child {
+        margin-right: 10px;
+      }
+    }
   }
 `;
 const MainBlock = styled.div`
