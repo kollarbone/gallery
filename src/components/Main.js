@@ -322,22 +322,6 @@ const List = styled.div`
 `;
 const Main = (props) => {
   const [data, setData] = useState(null);
-  useEffect(() => {
-    axios
-      .get(
-        "https://test-front.framework.team/paintings?_page=" +
-          [currentPage] +
-          "&_limit=12"
-      )
-      .then((response) => {
-        setData(response.data);
-      });
-
-    axios.get("https://test-front.framework.team/authors").then((response) => {
-      setAutorSearch(response.data);
-    });
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   const currentData = (data) => {
     return data.map((i, index) => {
@@ -401,7 +385,22 @@ const Main = (props) => {
     }
   });
   const [autorSearch, setAutorSearch] = useState([]);
+  useEffect(() => {
+    axios
+      .get(
+        "https://test-front.framework.team/paintings?_page=" +
+          [currentPage] +
+          "&_limit=12"
+      )
+      .then((response) => {
+        setData(response.data);
+      });
 
+    // axios.get("https://test-front.framework.team/authors").then((response) => {
+    //   setAutorSearch(response.data);
+    // });
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  });
   const imageUrl = "https://test-front.framework.team";
   const [valueSearchName, setValueSearchName] = useState("");
   const searchData = (data) => {
@@ -438,39 +437,39 @@ const Main = (props) => {
       );
     });
   };
-  const [selectedAutor, setSelectedAutor] = useState("");
-  const [newData, setNewDFata] = useState(null);
-  const [id, setId] = useState("");
-  const selectedAutorData = () => {
-    props.autor.autor.map((autorId) => {
-      if (autorId.name === selectedAutor) {
-        setId(autorId.id);
-      }
-    });
-  };
-  console.log(id, selectedAutor);
-  const locationSearch = props.autor.location;
+  // const [selectedAutor, setSelectedAutor] = useState("");
+  // const [newData, setNewDFata] = useState(null);
+  // const [id, setId] = useState("");
+  // const selectedAutorData = () => {
+  //   props.autor.autor.map((autorId) => {
+  //     if (autorId.name === selectedAutor) {
+  //       setId(autorId.id);
+  //     }
+  //   });
+  // };
+  // console.log(id, selectedAutor);
+  // const locationSearch = props.autor.location;
   const [isActive, setIsActive] = useState(false);
 
-  const DropdownMenu = () => {
-    return (
-      <DropdownMenuList className="DropdownMenuList">
-        {autorSearch.map((autor) => {
-          return (
-            <List key={autor.id}>
-              <span
-                id={autor.name}
-                name={autor.id}
-                onClick={(e) => setSelectedAutor(e.target.id)}
-              >
-                {autor.name}
-              </span>
-            </List>
-          );
-        })}
-      </DropdownMenuList>
-    );
-  };
+  // const DropdownMenu = () => {
+  //   return (
+  //     <DropdownMenuList className="DropdownMenuList">
+  //       {autorSearch.map((autor) => {
+  //         return (
+  //           <List key={autor.id}>
+  //             <span
+  //               id={autor.name}
+  //               name={autor.id}
+  //               onClick={(e) => setSelectedAutor(e.target.id)}
+  //             >
+  //               {autor.name}
+  //             </span>
+  //           </List>
+  //         );
+  //       })}
+  //     </DropdownMenuList>
+  //   );
+  // };
   return (
     <MainContainer>
       <Header>
@@ -491,20 +490,20 @@ const Main = (props) => {
             onClick={(e) => setIsActive(!isActive)}
             className={isActive ? "openFilterContainer" : "FilterContainer"}
           >
-            {selectedAutor ? <h5>{selectedAutor}</h5> : <h5>Author</h5>}
+            {/* {selectedAutor ? <h5>{selectedAutor}</h5> : <h5>Author</h5>} */}
             {isActive === true ? (
               <BsCaretUpFill color={props.theme.textRgba} />
             ) : (
               <BsCaretDownFill color={props.theme.textRgba} />
             )}
 
-            {isActive && (
+            {/* {isActive && (
               <DropdownMenu
                 selected={selectedAutor}
                 setSelected={setSelectedAutor}
                 setIsActive={setIsActive}
               />
-            )}
+            )} */}
           </div>
           <div className="FilterContainer">
             <h5>Location</h5>
@@ -519,9 +518,9 @@ const Main = (props) => {
       <MainBlock>
         {data && valueSearchName
           ? searchData(data)
-          : data && selectedAutor
-          ? selectedAutorData(data)
-          : data && currentData(data)}
+          : // : data && selectedAutor
+            // ? selectedAutorData(data)
+            data && currentData(data)}
       </MainBlock>
       <Paggination>
         <button
