@@ -438,52 +438,20 @@ const Main = (props) => {
       );
     });
   };
+  const [selectedAutor, setSelectedAutor] = useState("");
   const [newData, setNewDFata] = useState(null);
-  const selectedAutorData = (data) => {
-    return data.map((i, index) => {
-      props.autor.autor.map((autorId) => {
-        if (autorId.name === selectedAutor) {
-          const id = autorId.id;
-          // axios
-          //   .get("https://test-front.framework.team/paintings?authorId=" + [id])
-          //   .then((response) => {
-          //     setNewDFata(response.data);
-          //   });
-          console.log(newData);
-          return (
-            <NameArt key={index}>
-              <img src={imageUrl + i.imageUrl} alt="" />
-              <div className="hide">
-                <h3>{i.name}</h3>
-                <span>
-                  <h4>Author: </h4>
-                  {props.autor.autor.map((a) => {
-                    if (a.id === i.authorId) {
-                      return a.name;
-                    }
-                  })}
-                </span>
-                <span>
-                  <h4>Created: </h4> {i.created}
-                </span>
-                <span>
-                  <h4>Location: </h4>
-                  {props.autor.location.map((a) => {
-                    if (a.id === i.locationId) {
-                      return a.location;
-                    }
-                  })}
-                </span>
-              </div>
-            </NameArt>
-          );
-        }
-      });
+  const [id, setId] = useState("");
+  const selectedAutorData = () => {
+    props.autor.autor.map((autorId) => {
+      if (autorId.name === selectedAutor) {
+        setId(autorId.id);
+      }
     });
   };
+  console.log(id, selectedAutor);
   const locationSearch = props.autor.location;
   const [isActive, setIsActive] = useState(false);
-  const [selectedAutor, setSelectedAutor] = useState("");
+
   const DropdownMenu = () => {
     return (
       <DropdownMenuList className="DropdownMenuList">
