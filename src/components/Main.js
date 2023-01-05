@@ -137,15 +137,6 @@ const FilterContainer = styled.div`
     }
   }
 `;
-const MainBlock = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-`;
 
 const Paggination = styled.div`
   list-style: none;
@@ -202,51 +193,91 @@ const Paggination = styled.div`
     background-color: ${(props) => props.theme.body};
   }
 `;
-
+const DropdownMenuList = styled.div`
+  transition: all 0.2s ease-in-out;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100.55%;
+  z-index: 1;
+  left: -1px;
+  right: 0px;
+  top: 44px;
+  background: ${(props) => props.theme.body};
+  border: 1px solid ${(props) => props.theme.bodyRgba};
+  border-radius: 0px 0px 8px 8px;
+  overflow: auto;
+  max-height: 205px;
+`;
+const List = styled.div`
+  color: ${(props) => props.theme.text};
+  transition: all 0.2s ease-in-out;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow: hidden;
+  :hover {
+    transition: all 0.2s ease-in-out;
+    color: ${(props) => props.theme.body};
+    background: ${(props) => props.theme.text};
+  }
+  :last-child {
+    margin-bottom: 15px;
+  }
+  span {
+    font-weight: 500;
+    font-size: 16px;
+    white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    margin-left: 30px;
+  }
+`;
 const Main = (props) => {
   const [data, setData] = useState(null);
-  const [currentPage, setCurrentPage] = useState(1);
-  const pages = [];
-  for (let i = 1; i <= 6; i++) {
-    pages.push(i);
-  }
-  const handleClick = (event) => {
-    setCurrentPage(Math.ceil(event.target.id));
-  };
-  const pageNumberLimit = 3;
-  const maxPageNumberLimit = 3;
-  const minPageNumberLimit = 0;
-  const handlePage = (page) => {
-    setCurrentPage(page);
-  };
-  const renderPageNumbers = pages.map((number) => {
-    if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
-      return (
-        <li
-          key={number}
-          id={number}
-          onClick={handleClick}
-          className={currentPage === number ? "active" : null}
-        >
-          {number}
-        </li>
-      );
-    } else {
-      return null;
-    }
-  });
-  const [autorSearch, setAutorSearch] = useState([]);
+  // const [currentPage, setCurrentPage] = useState(1);
+  // const pages = [];
+  // for (let i = 1; i <= 6; i++) {
+  //   pages.push(i);
+  // }
+  // const handleClick = (event) => {
+  //   setCurrentPage(Math.ceil(event.target.id));
+  // };
+  // const pageNumberLimit = 3;
+  // const maxPageNumberLimit = 3;
+  // const minPageNumberLimit = 0;
+  // const handlePage = (page) => {
+  //   setCurrentPage(page);
+  // };
+  // const renderPageNumbers = pages.map((number) => {
+  //   if (number < maxPageNumberLimit + 1 && number > minPageNumberLimit) {
+  //     return (
+  //       <li
+  //         key={number}
+  //         id={number}
+  //         onClick={handleClick}
+  //         className={currentPage === number ? "active" : null}
+  //       >
+  //         {number}
+  //       </li>
+  //     );
+  //   } else {
+  //     return null;
+  //   }
+  // });
+  const [autorSearch, setAutorSearch] = useState("");
   useEffect(() => {
-    axios
-      .get(
-        "https://test-front.framework.team/paintings?_page=" +
-          [currentPage] +
-          "&_limit=12"
-      )
-      .then((response) => {
-        setData(response.data);
-      });
-
+    // axios.get("https://test-front.framework.team/authors").then((response) => {
+    //   setAutorSearch(response.data);
+    // });
+    // axios
+    //   .get(
+    //     "https://test-front.framework.team/paintings?_page=" +
+    //       [currentPage] +
+    //       "&_limit=12"
+    //   )
+    //   .then((response) => {
+    //     setData(response.data);
+    //   });
     // axios.get("https://test-front.framework.team/authors").then((response) => {
     //   setAutorSearch(response.data);
     // });
@@ -254,14 +285,14 @@ const Main = (props) => {
   });
 
   const [valueSearchName, setValueSearchName] = useState("");
-  // const [filteredCharacters, setFilteredCharacters] = useState("");
+
   const searchData = (data) => {
     const filteredCharacters = data.filter((i) => {
       return i.name.toLowerCase().includes(valueSearchName.toLowerCase());
     });
     return filteredCharacters;
   };
-  // const [selectedAutor, setSelectedAutor] = useState("");
+  const [selectedAutor, setSelectedAutor] = useState("");
   // const [newData, setNewDFata] = useState(null);
   // const [id, setId] = useState("");
   // const selectedAutorData = () => {
@@ -275,25 +306,25 @@ const Main = (props) => {
   // const locationSearch = props.autor.location;
   const [isActive, setIsActive] = useState(false);
 
-  // const DropdownMenu = () => {
-  //   return (
-  //     <DropdownMenuList className="DropdownMenuList">
-  //       {autorSearch.map((autor) => {
-  //         return (
-  //           <List key={autor.id}>
-  //             <span
-  //               id={autor.name}
-  //               name={autor.id}
-  //               onClick={(e) => setSelectedAutor(e.target.id)}
-  //             >
-  //               {autor.name}
-  //             </span>
-  //           </List>
-  //         );
-  //       })}
-  //     </DropdownMenuList>
-  //   );
-  // };
+  const DropdownMenu = () => {
+    return (
+      <DropdownMenuList className="DropdownMenuList">
+        {autorSearch.map((autor) => {
+          return (
+            <List key={autor.id}>
+              <span
+                id={autor.name}
+                name={autor.id}
+                onClick={(e) => setSelectedAutor(e.target.id)}
+              >
+                {autor.name}
+              </span>
+            </List>
+          );
+        })}
+      </DropdownMenuList>
+    );
+  };
 
   return (
     <MainContainer>
@@ -315,21 +346,20 @@ const Main = (props) => {
             onClick={(e) => setIsActive(!isActive)}
             className={isActive ? "openFilterContainer" : "FilterContainer"}
           >
-            {/* {selectedAutor ? <h5>{selectedAutor}</h5> : */}
-            <h5>Author</h5>
+            {selectedAutor ? <h5>{selectedAutor}</h5> : <h5>Author</h5>}
             {isActive === true ? (
               <BsCaretUpFill color={props.theme.textRgba} />
             ) : (
               <BsCaretDownFill color={props.theme.textRgba} />
             )}
 
-            {/* {isActive && (
+            {isActive && (
               <DropdownMenu
                 selected={selectedAutor}
                 setSelected={setSelectedAutor}
                 setIsActive={setIsActive}
               />
-            )} */}
+            )}
           </div>
           <div className="FilterContainer">
             <h5>Location</h5>
@@ -341,82 +371,17 @@ const Main = (props) => {
           </div>
         </FilterContainer>
       </Header>
-      <MainBlock>
-        {/* {data && valueSearchName
+
+      {/* {data && valueSearchName
           ? searchData(data)
           : // : data && selectedAutor
             // ? selectedAutorData(data)
             data && currentData(data)} */}
-        <GalleryImages
-          data={valueSearchName ? searchData(data) : data}
-          autor={props.autor}
-        />
-      </MainBlock>
-      <Paggination>
-        <button
-          onClick={() => handlePage(1)}
-          className={currentPage === 1 ? "first" : ""}
-          style={{ borderRadius: "10px 0px 0px 10px" }}
-        >
-          <BsChevronDoubleLeft
-            style={
-              currentPage === 1
-                ? {
-                    color: props.theme.textRgba
-                  }
-                : { color: props.theme.text, cursor: "pointer" }
-            }
-          />
-        </button>
-        <button
-          onClick={currentPage === 1 ? null : () => handlePage(currentPage - 1)}
-          className={currentPage === 1 ? "first" : ""}
-        >
-          <BsChevronLeft
-            style={
-              currentPage === 1
-                ? {
-                    color: props.theme.textRgba
-                  }
-                : { color: props.theme.text, cursor: "pointer" }
-            }
-          />
-        </button>
-        {renderPageNumbers}
-        <button
-          onClick={
-            currentPage === maxPageNumberLimit
-              ? null
-              : () => handlePage(currentPage + 1)
-          }
-          className={currentPage === pageNumberLimit ? "last" : ""}
-        >
-          <BsChevronRight
-            style={
-              currentPage === pageNumberLimit
-                ? {
-                    color: props.theme.textRgba
-                  }
-                : { color: props.theme.text, cursor: "pointer" }
-            }
-          />
-        </button>
-        <button
-          onClick={() => handlePage(pageNumberLimit)}
-          className={currentPage === pageNumberLimit ? "last" : ""}
-          style={{ borderRadius: "0px 10px 10px 0px" }}
-        >
-          <BsChevronDoubleRight
-            style={
-              currentPage === pageNumberLimit
-                ? {
-                    color: props.theme.textRgba
-                  }
-                : { color: props.theme.text, cursor: "pointer" }
-            }
-          />
-        </button>
-      </Paggination>
+      <GalleryImages
+        data={valueSearchName ? searchData(data) : data}
+        autor={props.autor}
+        theme={props.theme}
+      />
     </MainContainer>
   );
 };
