@@ -11,6 +11,7 @@ import {
 } from "react-icons/bs";
 import { BsCaretDownFill, BsCaretUpFill } from "react-icons/bs";
 import axios from "axios";
+import GalleryImages from "./GalleryImages";
 
 const MainContainer = styled.div`
   max-width: 1160px;
@@ -145,87 +146,7 @@ const MainBlock = styled.div`
   justify-content: center;
   width: 100%;
 `;
-const NameArt = styled.div`
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  position: relative;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  .hide {
-    position: absolute;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    background: rgba(255, 255, 255, 0.75);
-    bottom: 10px;
-    display: flex;
-    flex-direction: column;
-    min-height: 30px;
-    align-items: flex-start;
-    max-width: 360px;
-    min-width: 280px;
-    height: 30px;
-    width: 100vw;
-    border-radius: 0px 0px 20px 20px;
-    justify-content: center;
-    transition: all 0.2s ease-in-out;
-    h4 {
-      visibility: hidden;
-      display: none;
-    }
-    span {
-      visibility: hidden;
-      display: none;
-    }
-    h3 {
-      margin-left: 15px;
-      white-space: nowrap;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-right: 15px;
-    }
-  }
-  .hide:hover {
-    height: 145px;
-    bottom: 10px;
-    transition: all 0.2s ease-in-out;
-    h4 {
-      display: flex;
-      visibility: visible;
-      font-weight: 600;
-      margin-left: 15px;
-      margin-bottom: 5px;
-      margin-right: 5px;
-      color: #000;
-    }
-    span {
-      visibility: visible;
-      font-weight: 300;
-      font-size: 13px;
-      display: flex;
-    }
-    h3 {
-      margin-left: 15px;
-      white-space: normal;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      margin-right: 15px;
-      margin-bottom: 5px;
-    }
-  }
-  img {
-    max-width: 360px;
-    border-radius: 20px;
-    max-height: 275px;
-    min-width: 280px;
-    min-height: 205px;
-    margin: 10px;
-    width: 100vw;
-    height: 100vw;
-  }
-`;
+
 const Paggination = styled.div`
   list-style: none;
   display: flex;
@@ -281,79 +202,9 @@ const Paggination = styled.div`
     background-color: ${(props) => props.theme.body};
   }
 `;
-const DropdownMenuList = styled.div`
-  transition: all 0.2s ease-in-out;
-  position: absolute;
-  box-sizing: border-box;
-  width: 100.55%;
-  z-index: 1;
-  left: -1px;
-  right: 0px;
-  top: 44px;
-  background: ${(props) => props.theme.body};
-  border: 1px solid ${(props) => props.theme.bodyRgba};
-  border-radius: 0px 0px 8px 8px;
-  overflow: auto;
-  max-height: 205px;
-`;
-const List = styled.div`
-  color: ${(props) => props.theme.text};
-  transition: all 0.2s ease-in-out;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  overflow: hidden;
-  :hover {
-    transition: all 0.2s ease-in-out;
-    color: ${(props) => props.theme.body};
-    background: ${(props) => props.theme.text};
-  }
-  :last-child {
-    margin-bottom: 15px;
-  }
-  span {
-    font-weight: 500;
-    font-size: 16px;
-    white-space: nowrap;
-    transition: all 0.2s ease-in-out;
-    text-overflow: ellipsis;
-    cursor: pointer;
-    margin-left: 30px;
-  }
-`;
+
 const Main = (props) => {
   const [data, setData] = useState(null);
-
-  const currentData = (data) => {
-    return data.map((i, index) => {
-      return (
-        <NameArt key={index}>
-          <img src={imageUrl + i.imageUrl} alt="" />
-          <div className="hide">
-            <h3>{i.name}</h3>
-            <span>
-              <h4>Author: </h4>
-              {props.autor.autor.map((a) => {
-                if (a.id === i.authorId) {
-                  return a.name;
-                }
-              })}
-            </span>
-            <span>
-              <h4>Created: </h4> {i.created}
-            </span>
-            <span>
-              <h4>Location: </h4>{" "}
-              {props.autor.location.map((a) => {
-                if (a.id === i.locationId) {
-                  return a.location;
-                }
-              })}
-            </span>
-          </div>
-        </NameArt>
-      );
-    });
-  };
   const [currentPage, setCurrentPage] = useState(1);
   const pages = [];
   for (let i = 1; i <= 6; i++) {
@@ -362,9 +213,9 @@ const Main = (props) => {
   const handleClick = (event) => {
     setCurrentPage(Math.ceil(event.target.id));
   };
-  const [pageNumberLimit, setNumberLimit] = useState(3);
-  const [maxPageNumberLimit, setMaxNumberLimit] = useState(3);
-  const [minPageNumberLimit, setMinNumberLimit] = useState(0);
+  const pageNumberLimit = 3;
+  const maxPageNumberLimit = 3;
+  const minPageNumberLimit = 0;
   const handlePage = (page) => {
     setCurrentPage(page);
   };
@@ -401,41 +252,14 @@ const Main = (props) => {
     // });
     // eslint-disable-next-line react-hooks/exhaustive-deps
   });
-  const imageUrl = "https://test-front.framework.team";
+
   const [valueSearchName, setValueSearchName] = useState("");
+  // const [filteredCharacters, setFilteredCharacters] = useState("");
   const searchData = (data) => {
     const filteredCharacters = data.filter((i) => {
       return i.name.toLowerCase().includes(valueSearchName.toLowerCase());
     });
-    return filteredCharacters.map((i, index) => {
-      return (
-        <NameArt key={index}>
-          <img src={imageUrl + i.imageUrl} alt="" />
-          <div className="hide">
-            <h3>{i.name}</h3>
-            <span>
-              <h4>Author: </h4>
-              {props.autor.autor.map((a) => {
-                if (a.id === i.authorId) {
-                  return a.name;
-                }
-              })}
-            </span>
-            <span>
-              <h4>Created: </h4> {i.created}
-            </span>
-            <span>
-              <h4>Location: </h4>
-              {props.autor.location.map((a) => {
-                if (a.id === i.locationId) {
-                  return a.location;
-                }
-              })}
-            </span>
-          </div>
-        </NameArt>
-      );
-    });
+    return filteredCharacters;
   };
   // const [selectedAutor, setSelectedAutor] = useState("");
   // const [newData, setNewDFata] = useState(null);
@@ -470,6 +294,7 @@ const Main = (props) => {
   //     </DropdownMenuList>
   //   );
   // };
+
   return (
     <MainContainer>
       <Header>
@@ -490,7 +315,8 @@ const Main = (props) => {
             onClick={(e) => setIsActive(!isActive)}
             className={isActive ? "openFilterContainer" : "FilterContainer"}
           >
-            {/* {selectedAutor ? <h5>{selectedAutor}</h5> : <h5>Author</h5>} */}
+            {/* {selectedAutor ? <h5>{selectedAutor}</h5> : */}
+            <h5>Author</h5>
             {isActive === true ? (
               <BsCaretUpFill color={props.theme.textRgba} />
             ) : (
@@ -516,11 +342,15 @@ const Main = (props) => {
         </FilterContainer>
       </Header>
       <MainBlock>
-        {data && valueSearchName
+        {/* {data && valueSearchName
           ? searchData(data)
           : // : data && selectedAutor
             // ? selectedAutorData(data)
-            data && currentData(data)}
+            data && currentData(data)} */}
+        <GalleryImages
+          data={valueSearchName ? searchData(data) : data}
+          autor={props.autor}
+        />
       </MainBlock>
       <Paggination>
         <button
@@ -539,7 +369,7 @@ const Main = (props) => {
           />
         </button>
         <button
-          onClick={() => handlePage(currentPage - 1)}
+          onClick={currentPage === 1 ? null : () => handlePage(currentPage - 1)}
           className={currentPage === 1 ? "first" : ""}
         >
           <BsChevronLeft
@@ -554,7 +384,11 @@ const Main = (props) => {
         </button>
         {renderPageNumbers}
         <button
-          onClick={() => handlePage(currentPage + 1)}
+          onClick={
+            currentPage === maxPageNumberLimit
+              ? null
+              : () => handlePage(currentPage + 1)
+          }
           className={currentPage === pageNumberLimit ? "last" : ""}
         >
           <BsChevronRight
