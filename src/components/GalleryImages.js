@@ -1,29 +1,7 @@
-import Main from "./Main";
-import axios from "axios";
-import React, { useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
-import { motion } from "framer-motion";
+import React from "react";
+import styled from "styled-components";
 
 class MainContainer extends React.Component {
-  // componentDidMount() {
-  //   axios
-  //     .get(
-  //       "https://test-front.framework.team/paintings?_limit=12&_page=" +
-  //         [this.state.currentPage]
-  //     )
-  //     .then((response) => {
-  //       this.setState({ data: response.data });
-  //     });
-  //   axios.get("https://test-front.framework.team/authors").then((response) => {
-  //     this.setState({ autor: response.data });
-  //   });
-  //   axios
-  //     .get("https://test-front.framework.team/locations")
-  //     .then((response) => {
-  //       this.setState({ location: response.data });
-  //     });
-  // }
-
   render() {
     const MainBlock = styled.div`
       display: flex;
@@ -115,7 +93,6 @@ class MainContainer extends React.Component {
         height: 100vw;
       }
     `;
-
     const imageUrl = "https://test-front.framework.team";
 
     return (

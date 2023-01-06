@@ -1,7 +1,6 @@
-import Main from "./Main";
 import axios from "axios";
-import React, { useEffect, useState } from "react";
-import styled, { keyframes } from "styled-components";
+import React from "react";
+import styled from "styled-components";
 import { motion } from "framer-motion";
 import Logo from "./svg/logo";
 import {
