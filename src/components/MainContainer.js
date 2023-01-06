@@ -17,7 +17,16 @@ import GalleryImages from "./GalleryImages";
 class MainContainer extends React.Component {
   constructor(props) {
     super(props);
-    this.state = { autor: [], location: [], currentPage: 1, data: [] };
+    this.state = {
+      autor: [],
+      location: [],
+      currentPage: 1,
+      data: [],
+      valueSearchName: "",
+      autorSearch: "",
+      selectedAutor: "",
+      isActive: false
+    };
   }
   componentDidMount() {
     axios
@@ -37,6 +46,9 @@ class MainContainer extends React.Component {
         this.setState({ location: response.data });
       });
   }
+  onChangeHandler = (event) => {
+    this.setState({ valueSearchName: event.target.value });
+  };
 
   render() {
     const MainContainer = styled.div`
@@ -264,87 +276,6 @@ class MainContainer extends React.Component {
       justify-content: center;
       width: 100%;
     `;
-    const NameArt = styled.div`
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      .hide {
-        position: absolute;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        background: rgba(255, 255, 255, 0.75);
-        bottom: 10px;
-        display: flex;
-        flex-direction: column;
-        min-height: 30px;
-        align-items: flex-start;
-        max-width: 360px;
-        min-width: 280px;
-        height: 30px;
-        width: 100vw;
-        border-radius: 0px 0px 20px 20px;
-        justify-content: center;
-        transition: all 0.2s ease-in-out;
-        h4 {
-          visibility: hidden;
-          display: none;
-        }
-        span {
-          visibility: hidden;
-          display: none;
-        }
-        h3 {
-          margin-left: 15px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          margin-right: 15px;
-        }
-      }
-      .hide:hover {
-        height: 145px;
-        bottom: 10px;
-        transition: all 0.2s ease-in-out;
-        h4 {
-          display: flex;
-          visibility: visible;
-          font-weight: 600;
-          margin-left: 15px;
-          margin-bottom: 5px;
-          margin-right: 5px;
-          color: #000;
-        }
-        span {
-          visibility: visible;
-          font-weight: 300;
-          font-size: 13px;
-          display: flex;
-        }
-        h3 {
-          margin-left: 15px;
-          white-space: normal;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          margin-right: 15px;
-          margin-bottom: 5px;
-        }
-      }
-      img {
-        max-width: 360px;
-        border-radius: 20px;
-        max-height: 275px;
-        min-width: 280px;
-        min-height: 205px;
-        margin: 10px;
-        width: 100vw;
-        height: 100vw;
-      }
-    `;
 
     const pages = [];
     for (let i = 1; i <= 6; i++) {
@@ -360,6 +291,21 @@ class MainContainer extends React.Component {
         .then((response) => {
           this.setState({ data: response.data });
         });
+    };
+    const onClickHandler = (e) => {
+      this.setState({
+        selectedAutor: e.target.id
+      });
+      this.state.autor.map((i) => {
+        i.name === e.target.id &&
+          axios
+            .get(
+              "https://test-front.framework.team/paintings?authorId=" + [i.id]
+            )
+            .then((response) => {
+              this.setState({ data: response.data });
+            });
+      });
     };
     const pageNumberLimit = 3;
     const maxPageNumberLimit = 3;
@@ -383,36 +329,30 @@ class MainContainer extends React.Component {
         return null;
       }
     });
-    // const [valueSearchName, setValueSearchName] = useState("");
-    // const searchData = (data) => {
-    //   const filteredCharacters = data.filter((i) => {
-    //     return i.name.toLowerCase().includes(valueSearchName.toLowerCase());
-    //   });
-    //   return filteredCharacters;
-    // };
-    // const [selectedAutor, setSelectedAutor] = useState("");
-    // const [isActive, setIsActive] = useState(false);
-    // const DropdownMenu = () => {
-    //   return (
-    //     <DropdownMenuList className="DropdownMenuList">
-    //       {autorSearch.map((autor) => {
-    //         return (
-    //           <List key={autor.id}>
-    //             <span
-    //               id={autor.name}
-    //               name={autor.id}
-    //               onClick={(e) => setSelectedAutor(e.target.id)}
-    //             >
-    //               {autor.name}
-    //             </span>
-    //           </List>
-    //         );
-    //       })}
-    //     </DropdownMenuList>
-    //   );
-    // };
-    const imageUrl = "https://test-front.framework.team";
-    console.log(this.state.currentPage);
+    const searchData = (data) => {
+      const filteredCharacters = data.filter((i) => {
+        return i.name
+          .toLowerCase()
+          .includes(this.state.valueSearchName.toLowerCase());
+      });
+      return filteredCharacters;
+    };
+    const DropdownMenu = () => {
+      return (
+        <DropdownMenuList className="DropdownMenuList">
+          {this.state.autor.map((autor) => {
+            return (
+              <List key={autor.id}>
+                <span id={autor.name} onClick={onClickHandler}>
+                  {autor.name}
+                </span>
+              </List>
+            );
+          })}
+        </DropdownMenuList>
+      );
+    };
+
     return (
       <MainContainer>
         <Header>
@@ -425,29 +365,37 @@ class MainContainer extends React.Component {
           </LogoContainer>
           <FilterContainer>
             <input
+              autoFocus="autoFocus"
               placeholder="Name"
-              onChange={(event) => setValueSearchName(event.target.value)}
+              value={this.state.valueSearchName}
+              onChange={this.onChangeHandler}
             />
 
-            {/* <div
-            onClick={(e) => setIsActive(!isActive)}
-            className={isActive ? "openFilterContainer" : "FilterContainer"}
-          >
-            {selectedAutor ? <h5>{selectedAutor}</h5> : <h5>Author</h5>}
-            {isActive === true ? (
-              <BsCaretUpFill color={props.theme.textRgba} />
-            ) : (
-              <BsCaretDownFill color={props.theme.textRgba} />
-            )}
+            <div
+              onClick={(e) => this.setState({ isActive: !this.state.isActive })}
+              className={
+                this.state.isActive ? "openFilterContainer" : "FilterContainer"
+              }
+            >
+              {this.state.selectedAutor ? (
+                <h5>{this.state.selectedAutor}</h5>
+              ) : (
+                <h5>Author</h5>
+              )}
+              {this.state.isActive === true ? (
+                <BsCaretUpFill color={this.props.theme.textRgba} />
+              ) : (
+                <BsCaretDownFill color={this.props.theme.textRgba} />
+              )}
 
-            {isActive && (
-              <DropdownMenu
-                selected={selectedAutor}
-                setSelected={setSelectedAutor}
-                setIsActive={setIsActive}
-              />
-            )}
-          </div> */}
+              {this.state.isActive && (
+                <DropdownMenu
+                  selected={this.state.selectedAutor}
+                  setSelected={this.state.setSelectedAutor}
+                  setIsActive={this.state.isActive}
+                />
+              )}
+            </div>
             <div className="FilterContainer">
               <h5>Location</h5>
               <BsCaretDownFill color={this.props.theme.textRgba} />
@@ -470,36 +418,16 @@ class MainContainer extends React.Component {
         theme={props.theme}
       /> */}
         <MainBlock>
-          {this.state.data &&
-            this.state.data.map((i, index) => {
-              return (
-                <NameArt key={index}>
-                  <img src={imageUrl + i.imageUrl} alt="" />
-                  <div className="hide">
-                    <h3>{i.name}</h3>
-                    <span>
-                      <h4>Author: </h4>
-                      {this.state.autor.map((a) => {
-                        if (a.id === i.authorId) {
-                          return a.name;
-                        }
-                      })}
-                    </span>
-                    <span>
-                      <h4>Created: </h4> {i.created}
-                    </span>
-                    <span>
-                      <h4>Location: </h4>
-                      {this.state.location.map((a) => {
-                        if (a.id === i.locationId) {
-                          return a.location;
-                        }
-                      })}
-                    </span>
-                  </div>
-                </NameArt>
-              );
-            })}
+          <GalleryImages
+            data={
+              this.state.valueSearchName
+                ? searchData(this.state.data)
+                : this.state.data
+            }
+            autor={this.state.autor}
+            theme={this.props.theme}
+            location={this.state.location}
+          />
         </MainBlock>
         <Paggination>
           <button
