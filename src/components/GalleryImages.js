@@ -2,6 +2,7 @@ import Main from "./Main";
 import axios from "axios";
 import React, { useEffect, useState } from "react";
 import styled, { keyframes } from "styled-components";
+import { motion } from "framer-motion";
 
 class MainContainer extends React.Component {
   // componentDidMount() {

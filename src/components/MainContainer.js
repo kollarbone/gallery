@@ -9,7 +9,8 @@ import {
   BsChevronLeft,
   BsChevronRight,
   BsChevronDoubleLeft,
-  BsChevronDoubleRight
+  BsChevronDoubleRight,
+  BsX
 } from "react-icons/bs";
 import { BsCaretDownFill, BsCaretUpFill } from "react-icons/bs";
 import GalleryImages from "./GalleryImages";
@@ -25,7 +26,9 @@ class MainContainer extends React.Component {
       valueSearchName: "",
       autorSearch: "",
       selectedAutor: "",
-      isActive: false
+      isActiveA: false,
+      isActiveL: false,
+      selectedLocation: ""
     };
   }
   componentDidMount() {
@@ -122,6 +125,11 @@ class MainContainer extends React.Component {
         :last-child {
           margin-right: 0px;
         }
+        :active,
+        :hover,
+        :focus {
+          outline: none;
+        }
       }
       .openFilterContainer {
         border-radius: 8px 8px 0px 0px !important;
@@ -155,6 +163,7 @@ class MainContainer extends React.Component {
         .FilterContainer,
         input {
           width: 280px;
+
           :first-child {
             margin-left: 10px;
           }
@@ -228,7 +237,7 @@ class MainContainer extends React.Component {
         background-color: ${(props) => props.theme.body};
       }
     `;
-    const DropdownMenuList = styled.div`
+    const DropdownMenuList = styled(motion.div)`
       transition: all 0.2s ease-in-out;
       position: absolute;
       box-sizing: border-box;
@@ -242,6 +251,17 @@ class MainContainer extends React.Component {
       border-radius: 0px 0px 8px 8px;
       overflow: auto;
       max-height: 205px;
+      ::-webkit-scrollbar {
+        width: 15px;
+      }
+      ::-webkit-scrollbar-track {
+        background: ${(props) => props.theme.body};
+      }
+      ::-webkit-scrollbar-thumb {
+        background-color: ${(props) => props.theme.bodyRgba};
+        border-radius: 10px;
+        border: 3px solid ${(props) => props.theme.body};
+      }
     `;
     const List = styled.div`
       color: ${(props) => props.theme.text};
@@ -267,7 +287,7 @@ class MainContainer extends React.Component {
         margin-left: 30px;
       }
     `;
-    const MainBlock = styled.div`
+    const MainBlock = styled(motion.div)`
       display: flex;
       flex-direction: row;
       align-items: center;
@@ -292,7 +312,7 @@ class MainContainer extends React.Component {
           this.setState({ data: response.data });
         });
     };
-    const onClickHandler = (e) => {
+    const onClickHandlerA = (e) => {
       this.setState({
         selectedAutor: e.target.id
       });
@@ -305,6 +325,52 @@ class MainContainer extends React.Component {
             .then((response) => {
               this.setState({ data: response.data });
             });
+      });
+    };
+    const onClickHandlerL = (e) => {
+      this.setState({
+        selectedLocation: e.target.id
+      });
+      this.state.location.map((i) => {
+        i.location === e.target.id &&
+          axios
+            .get(
+              "https://test-front.framework.team/paintings?locationId=" + [i.id]
+            )
+            .then((response) => {
+              this.setState({ data: response.data });
+            });
+      });
+    };
+    const deleteFilterA = (id) => {
+      this.setState({
+        selectedAutor: null,
+        isActiveA: false
+      });
+      axios
+        .get(
+          "https://test-front.framework.team/paintings?_limit=12&_page=" +
+            [this.state.currentPage]
+        )
+        .then((response) => {
+          this.setState({ data: response.data });
+        });
+    };
+    const deleteFilterL = (id) => {
+      this.setState({
+        selectedLocation: null,
+        isActiveL: false
+      });
+      axios
+        .get(
+          "https://test-front.framework.team/paintings?_limit=12&_page=" +
+            [this.state.currentPage]
+        )
+        .then((response) => {
+          this.setState({ data: response.data });
+        });
+      this.setState({
+        selectedLocation: null
       });
     };
     const pageNumberLimit = 3;
@@ -337,14 +403,27 @@ class MainContainer extends React.Component {
       });
       return filteredCharacters;
     };
-    const DropdownMenu = () => {
+    const DropdownMenu = (selected) => {
       return (
-        <DropdownMenuList className="DropdownMenuList">
-          {this.state.autor.map((autor) => {
+        <DropdownMenuList
+          className="DropdownMenuList"
+          initial={{ height: 0 }}
+          animate={{ height: "55vh" }}
+          transition={{ type: "spring", duration: 0.3 }}
+        >
+          {this.state[selected.name].map((autor) => {
             return (
               <List key={autor.id}>
-                <span id={autor.name} onClick={onClickHandler}>
-                  {autor.name}
+                <span
+                  id={selected.name === "autor" ? autor.name : autor.location}
+                  key={selected.name}
+                  onClick={
+                    selected.name === "autor"
+                      ? onClickHandlerA
+                      : onClickHandlerL
+                  }
+                >
+                  {selected.name === "autor" ? autor.name : autor.location}
                 </span>
               </List>
             );
@@ -365,16 +444,18 @@ class MainContainer extends React.Component {
           </LogoContainer>
           <FilterContainer>
             <input
-              autoFocus="autoFocus"
+              // autoFocus="autoFocus"
               placeholder="Name"
               value={this.state.valueSearchName}
               onChange={this.onChangeHandler}
             />
 
             <div
-              onClick={(e) => this.setState({ isActive: !this.state.isActive })}
+              onClick={(e) =>
+                this.setState({ isActiveA: !this.state.isActiveA })
+              }
               className={
-                this.state.isActive ? "openFilterContainer" : "FilterContainer"
+                this.state.isActiveA ? "openFilterContainer" : "FilterContainer"
               }
             >
               {this.state.selectedAutor ? (
@@ -382,23 +463,82 @@ class MainContainer extends React.Component {
               ) : (
                 <h5>Author</h5>
               )}
-              {this.state.isActive === true ? (
-                <BsCaretUpFill color={this.props.theme.textRgba} />
+
+              {this.state.isActiveA === true ? (
+                <div style={{ zIndex: 10 }}>
+                  {this.state.selectedAutor ? (
+                    <BsX
+                      color={this.props.theme.textRgba}
+                      id="autor"
+                      onClick={deleteFilterA}
+                    />
+                  ) : null}
+                  <BsCaretUpFill color={this.props.theme.textRgba} />
+                </div>
               ) : (
-                <BsCaretDownFill color={this.props.theme.textRgba} />
+                <div style={{ zIndex: 10 }}>
+                  {this.state.selectedAutor ? (
+                    <BsX
+                      color={this.props.theme.textRgba}
+                      onClick={deleteFilterA}
+                    />
+                  ) : null}
+                  <BsCaretDownFill color={this.props.theme.textRgba} />
+                </div>
               )}
 
-              {this.state.isActive && (
+              {this.state.isActiveA && (
                 <DropdownMenu
                   selected={this.state.selectedAutor}
                   setSelected={this.state.setSelectedAutor}
-                  setIsActive={this.state.isActive}
+                  setIsActive={this.state.isActiveA}
+                  name="autor"
                 />
               )}
             </div>
-            <div className="FilterContainer">
-              <h5>Location</h5>
-              <BsCaretDownFill color={this.props.theme.textRgba} />
+            <div
+              onClick={(e) =>
+                this.setState({ isActiveL: !this.state.isActiveL })
+              }
+              className={
+                this.state.isActiveL ? "openFilterContainer" : "FilterContainer"
+              }
+            >
+              {this.state.selectedLocation ? (
+                <h5>{this.state.selectedLocation}</h5>
+              ) : (
+                <h5>Location</h5>
+              )}
+              {this.state.isActiveL === true ? (
+                <div>
+                  {this.state.selectedLocation ? (
+                    <BsX
+                      color={this.props.theme.textRgba}
+                      onClick={deleteFilterL}
+                    />
+                  ) : null}
+                  <BsCaretUpFill color={this.props.theme.textRgba} />
+                </div>
+              ) : (
+                <div>
+                  {this.state.selectedLocation ? (
+                    <BsX
+                      color={this.props.theme.textRgba}
+                      onClick={deleteFilterL}
+                    />
+                  ) : null}
+                  <BsCaretDownFill color={this.props.theme.textRgba} />
+                </div>
+              )}
+
+              {this.state.isActiveL && (
+                <DropdownMenu
+                  selected={this.state.selectedLocation}
+                  setSelected={this.state.selectedLocation}
+                  setIsActive={this.state.isActiveL}
+                  name="location"
+                />
+              )}
             </div>
             <div className="FilterContainer">
               <h5>Created</h5>
@@ -417,7 +557,14 @@ class MainContainer extends React.Component {
         autor={props.autor}
         theme={props.theme}
       /> */}
-        <MainBlock>
+        <MainBlock
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{
+            duration: 0.1,
+            delay: 1
+          }}
+        >
           <GalleryImages
             data={
               this.state.valueSearchName
