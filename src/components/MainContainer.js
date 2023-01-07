@@ -267,15 +267,6 @@ const List = styled.div`
     margin-left: 30px;
   }
 `;
-const MainBlock = styled(motion.div)`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  margin-bottom: 20px;
-  flex-wrap: wrap;
-  justify-content: center;
-  width: 100%;
-`;
 
 class MainContainerClass extends React.Component {
   constructor(props) {
@@ -361,7 +352,17 @@ class MainContainerClass extends React.Component {
     });
     this.setState({ newData: newArr });
   };
+
   render() {
+    const MainBlock = styled(motion.div)`
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      justify-content: center;
+      width: 100%;
+    `;
     const pages = [];
     for (let i = 1; i <= 6; i++) {
       pages.push(i);
@@ -688,7 +689,7 @@ class MainContainerClass extends React.Component {
           animate={{ opacity: 1 }}
           transition={{
             duration: 0.1,
-            delay: 1
+            delay: 0.5
           }}
         >
           <GalleryImages
