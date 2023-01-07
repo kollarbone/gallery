@@ -14,7 +14,270 @@ import {
 import { BsCaretDownFill, BsCaretUpFill } from "react-icons/bs";
 import GalleryImages from "./GalleryImages";
 
-class MainContainer extends React.Component {
+const MainContainer = styled.div`
+  max-width: 1160px;
+  min-width: 300px;
+  margin-left: auto;
+  margin-right: auto;
+  height: fit-content;
+  position: relative;
+  display: grid;
+  grid-template-columns: 1;
+  grid-template-rows: 3;
+  h2,
+  h4,
+  h5,
+  h6 {
+    font-family: "Karla", sans-serif;
+    font-weight: 500;
+    color: ${(props) => props.theme.text};
+  }
+  h3 {
+    font-weight: 700;
+    font-family: "Karla", sans-serif;
+  }
+  @media (max-width: 790px) {
+    justify-items: center;
+  }
+`;
+const Header = styled.div`
+  margin-top: 30px;
+  height: fit-content;
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 30px;
+  justify-content: center;
+`;
+const LogoContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 35px;
+`;
+const FilterContainer = styled.div`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  .FilterContainer,
+  input {
+    position: relative;
+    cursor: pointer;
+    min-width: 150px;
+    max-width: 280px;
+    width: 100%;
+    border: 1px solid ${(props) => props.theme.bodyRgba};
+    border-radius: 8px;
+    padding: 14px;
+    background: ${(props) => props.theme.body};
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    flex-wrap: wrap;
+    transition: all 0.2s ease-in-out;
+    :first-child {
+      margin-left: 0px;
+    }
+    :last-child {
+      margin-right: 0px;
+    }
+    :active,
+    :hover,
+    :focus {
+      outline: none;
+    }
+  }
+  .openFilterContainer {
+    border-radius: 8px 8px 0px 0px !important;
+    position: relative;
+    cursor: pointer;
+    min-width: 150px;
+    max-width: 280px;
+    width: 100%;
+    border: 1px solid ${(props) => props.theme.bodyRgba};
+    padding: 14px;
+    background: ${(props) => props.theme.body};
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 15px;
+    margin-left: 10px;
+    margin-right: 10px;
+    flex-wrap: wrap;
+    transition: all 0.2s ease-in-out;
+    :first-child {
+      margin-left: 0px;
+    }
+    :last-child {
+      margin-right: 0px;
+    }
+  }
+  @media (max-width: 790px) {
+    justify-content: center;
+    flex-direction: column;
+    .FilterContainer,
+    input {
+      width: 280px;
+
+      :first-child {
+        margin-left: 10px;
+      }
+      :last-child {
+        margin-right: 10px;
+      }
+    }
+    .openFilterContainer {
+      width: 280px;
+      :first-child {
+        margin-left: 10px;
+      }
+      :last-child {
+        margin-right: 10px;
+      }
+    }
+  }
+`;
+const Paggination = styled.div`
+  list-style: none;
+  display: flex;
+  align-items: center;
+  margin-bottom: 10px;
+  margin-left: 20px;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  li {
+    padding: 10px;
+    border: 1px solid ${(props) => props.theme.text};
+    height: 20px;
+    text-align: center;
+    width: 20px;
+    color: ${(props) => props.theme.text};
+  }
+  .active {
+    background-color: ${(props) => props.theme.text};
+    color: ${(props) => props.theme.body};
+    transition: all 0.2s ease-in-out;
+  }
+  .active:hover {
+    background-color: ${(props) => props.theme.text};
+    color: ${(props) => props.theme.body};
+  }
+  button {
+    background: none;
+    padding: 10px;
+    border: 1px solid ${(props) => props.theme.text};
+    height: 42px;
+    text-align: center;
+    width: 41px;
+    color: ${(props) => props.theme.text};
+  }
+  li:hover {
+    background-color: ${(props) => props.theme.textRgba};
+    transition: all 0.2s ease-in-out;
+  }
+  button:hover {
+    background-color: ${(props) => props.theme.textRgba};
+    transition: all 0.2s ease-in-out;
+  }
+  .first {
+    border: 1px solid ${(props) => props.theme.textRgba};
+  }
+  .last {
+    border: 1px solid ${(props) => props.theme.textRgba};
+  }
+  .first:hover {
+    background-color: ${(props) => props.theme.body};
+  }
+  .last:hover {
+    background-color: ${(props) => props.theme.body};
+  }
+`;
+const DropdownMenuList = styled(motion.div)`
+  transition: all 0.2s ease-in-out;
+  position: absolute;
+  box-sizing: border-box;
+  width: 100.55%;
+  z-index: 1;
+  left: -1px;
+  right: 0px;
+  top: 44px;
+  background: ${(props) => props.theme.body};
+  border: 1px solid ${(props) => props.theme.bodyRgba};
+  border-radius: 0px 0px 8px 8px;
+  overflow: auto;
+  max-height: 205px;
+
+  ::-webkit-scrollbar {
+    width: 15px;
+  }
+  ::-webkit-scrollbar-track {
+    background: ${(props) => props.theme.body};
+  }
+  ::-webkit-scrollbar-thumb {
+    background-color: ${(props) => props.theme.bodyRgba};
+    border-radius: 10px;
+    border: 3px solid ${(props) => props.theme.body};
+  }
+
+  .inputs {
+    display: flex;
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: center;
+    margin-top: 20px;
+    margin: 10px;
+    @media (max-width: 1024px) {
+      flex-direction: column;
+      align-items: center;
+    }
+    input {
+      border: none;
+      background: ${(props) => props.theme.input};
+      max-width: 100px;
+      min-width: 90px;
+    }
+  }
+`;
+const List = styled.div`
+  color: ${(props) => props.theme.text};
+  transition: all 0.2s ease-in-out;
+  padding-top: 10px;
+  padding-bottom: 10px;
+  overflow: hidden;
+  :hover {
+    transition: all 0.2s ease-in-out;
+    color: ${(props) => props.theme.body};
+    background: ${(props) => props.theme.text};
+  }
+  :last-child {
+    margin-bottom: 15px;
+  }
+  span {
+    font-weight: 500;
+    font-size: 16px;
+    white-space: nowrap;
+    transition: all 0.2s ease-in-out;
+    text-overflow: ellipsis;
+    cursor: pointer;
+    margin-left: 30px;
+  }
+`;
+const MainBlock = styled(motion.div)`
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+  justify-content: center;
+  width: 100%;
+`;
+
+class MainContainerClass extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -22,12 +285,15 @@ class MainContainer extends React.Component {
       location: [],
       currentPage: 1,
       data: [],
+      newData: [],
       valueSearchName: "",
       autorSearch: "",
       selectedAutor: "",
       isActiveA: false,
       isActiveL: false,
-      selectedLocation: ""
+      selectedLocation: "",
+      selectedData: { start: "", end: "" },
+      isActiveC: false
     };
   }
   componentDidMount() {
@@ -51,251 +317,47 @@ class MainContainer extends React.Component {
   onChangeHandler = (event) => {
     this.setState({ valueSearchName: event.target.value });
   };
-
+  onChangeHandlerDataStart = (event) => {
+    const NewDate = {
+      start: event.target.value,
+      end: this.state.selectedData.end
+    };
+    this.setState({ selectedData: NewDate });
+    const newArr = [];
+    this.state.data.map((i) => {
+      if (i.created > event.target.value) {
+        if (
+          this.state.selectedData.end &&
+          i.created < this.state.selectedData.end
+        ) {
+          newArr.push(i);
+        } else {
+          newArr.push(i);
+        }
+      }
+    });
+    this.setState({ newData: newArr });
+  };
+  onChangeHandlerDataEnd = (event) => {
+    event.preventDefault();
+    const NewDate = {
+      end: event.target.value,
+      start: this.state.selectedData.start
+    };
+    this.setState({ selectedData: NewDate });
+    const newArr = [];
+    this.state.data.map((i) => {
+      if (
+        i.created < event.target.value && this.state.selectedData.start
+          ? i.created > this.state.selectedData.start
+          : ""
+      ) {
+        newArr.push(i);
+      }
+    });
+    this.setState({ newData: newArr });
+  };
   render() {
-    const MainContainer = styled.div`
-      max-width: 1160px;
-      min-width: 300px;
-      margin-left: auto;
-      margin-right: auto;
-      height: fit-content;
-      position: relative;
-      display: grid;
-      grid-template-columns: 1;
-      grid-template-rows: 3;
-      h2,
-      h4,
-      h5,
-      h6 {
-        font-family: "Karla", sans-serif;
-        font-weight: 500;
-        color: ${(props) => props.theme.text};
-      }
-      h3 {
-        font-weight: 700;
-        font-family: "Karla", sans-serif;
-      }
-      @media (max-width: 790px) {
-        justify-items: center;
-      }
-    `;
-    const Header = styled.div`
-      margin-top: 30px;
-      height: fit-content;
-      display: flex;
-      flex-direction: column;
-      margin-bottom: 30px;
-      justify-content: center;
-    `;
-    const LogoContainer = styled.div`
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 35px;
-    `;
-    const FilterContainer = styled.div`
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      .FilterContainer,
-      input {
-        position: relative;
-        cursor: pointer;
-        min-width: 150px;
-        max-width: 280px;
-        width: 100%;
-        border: 1px solid ${(props) => props.theme.bodyRgba};
-        border-radius: 8px;
-        padding: 14px;
-        background: ${(props) => props.theme.body};
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        margin-left: 10px;
-        margin-right: 10px;
-        flex-wrap: wrap;
-        transition: all 0.2s ease-in-out;
-        :first-child {
-          margin-left: 0px;
-        }
-        :last-child {
-          margin-right: 0px;
-        }
-        :active,
-        :hover,
-        :focus {
-          outline: none;
-        }
-      }
-      .openFilterContainer {
-        border-radius: 8px 8px 0px 0px !important;
-        position: relative;
-        cursor: pointer;
-        min-width: 150px;
-        max-width: 280px;
-        width: 100%;
-        border: 1px solid ${(props) => props.theme.bodyRgba};
-        padding: 14px;
-        background: ${(props) => props.theme.body};
-        display: flex;
-        flex-direction: row;
-        align-items: center;
-        justify-content: space-between;
-        margin-bottom: 15px;
-        margin-left: 10px;
-        margin-right: 10px;
-        flex-wrap: wrap;
-        transition: all 0.2s ease-in-out;
-        :first-child {
-          margin-left: 0px;
-        }
-        :last-child {
-          margin-right: 0px;
-        }
-      }
-      @media (max-width: 790px) {
-        justify-content: center;
-        flex-direction: column;
-        .FilterContainer,
-        input {
-          width: 280px;
-
-          :first-child {
-            margin-left: 10px;
-          }
-          :last-child {
-            margin-right: 10px;
-          }
-        }
-        .openFilterContainer {
-          width: 280px;
-          :first-child {
-            margin-left: 10px;
-          }
-          :last-child {
-            margin-right: 10px;
-          }
-        }
-      }
-    `;
-    const Paggination = styled.div`
-      list-style: none;
-      display: flex;
-      align-items: center;
-      margin-bottom: 10px;
-      margin-left: 20px;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      li {
-        padding: 10px;
-        border: 1px solid ${(props) => props.theme.text};
-        height: 20px;
-        text-align: center;
-        width: 20px;
-        color: ${(props) => props.theme.text};
-      }
-      .active {
-        background-color: ${(props) => props.theme.text};
-        color: ${(props) => props.theme.body};
-        transition: all 0.2s ease-in-out;
-      }
-      .active:hover {
-        background-color: ${(props) => props.theme.text};
-        color: ${(props) => props.theme.body};
-      }
-      button {
-        background: none;
-        padding: 10px;
-        border: 1px solid ${(props) => props.theme.text};
-        height: 42px;
-        text-align: center;
-        width: 41px;
-        color: ${(props) => props.theme.text};
-      }
-      li:hover {
-        background-color: ${(props) => props.theme.textRgba};
-        transition: all 0.2s ease-in-out;
-      }
-      button:hover {
-        background-color: ${(props) => props.theme.textRgba};
-        transition: all 0.2s ease-in-out;
-      }
-      .first {
-        border: 1px solid ${(props) => props.theme.textRgba};
-      }
-      .last {
-        border: 1px solid ${(props) => props.theme.textRgba};
-      }
-      .first:hover {
-        background-color: ${(props) => props.theme.body};
-      }
-      .last:hover {
-        background-color: ${(props) => props.theme.body};
-      }
-    `;
-    const DropdownMenuList = styled(motion.div)`
-      transition: all 0.2s ease-in-out;
-      position: absolute;
-      box-sizing: border-box;
-      width: 100.55%;
-      z-index: 1;
-      left: -1px;
-      right: 0px;
-      top: 44px;
-      background: ${(props) => props.theme.body};
-      border: 1px solid ${(props) => props.theme.bodyRgba};
-      border-radius: 0px 0px 8px 8px;
-      overflow: auto;
-      max-height: 205px;
-      ::-webkit-scrollbar {
-        width: 15px;
-      }
-      ::-webkit-scrollbar-track {
-        background: ${(props) => props.theme.body};
-      }
-      ::-webkit-scrollbar-thumb {
-        background-color: ${(props) => props.theme.bodyRgba};
-        border-radius: 10px;
-        border: 3px solid ${(props) => props.theme.body};
-      }
-    `;
-    const List = styled.div`
-      color: ${(props) => props.theme.text};
-      transition: all 0.2s ease-in-out;
-      padding-top: 10px;
-      padding-bottom: 10px;
-      overflow: hidden;
-      :hover {
-        transition: all 0.2s ease-in-out;
-        color: ${(props) => props.theme.body};
-        background: ${(props) => props.theme.text};
-      }
-      :last-child {
-        margin-bottom: 15px;
-      }
-      span {
-        font-weight: 500;
-        font-size: 16px;
-        white-space: nowrap;
-        transition: all 0.2s ease-in-out;
-        text-overflow: ellipsis;
-        cursor: pointer;
-        margin-left: 30px;
-      }
-    `;
-    const MainBlock = styled(motion.div)`
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: 100%;
-    `;
-
     const pages = [];
     for (let i = 1; i <= 6; i++) {
       pages.push(i);
@@ -313,7 +375,8 @@ class MainContainer extends React.Component {
     };
     const onClickHandlerA = (e) => {
       this.setState({
-        selectedAutor: e.target.id
+        selectedAutor: e.target.id,
+        selectedLocation: null
       });
       this.state.autor.map((i) => {
         i.name === e.target.id &&
@@ -328,7 +391,8 @@ class MainContainer extends React.Component {
     };
     const onClickHandlerL = (e) => {
       this.setState({
-        selectedLocation: e.target.id
+        selectedLocation: e.target.id,
+        selectedAutor: null
       });
       this.state.location.map((i) => {
         i.location === e.target.id &&
@@ -370,6 +434,12 @@ class MainContainer extends React.Component {
         });
       this.setState({
         selectedLocation: null
+      });
+    };
+    const deleteFilterC = (id) => {
+      this.setState({
+        selectedData: { start: "", end: "" },
+        isActiveL: false
       });
     };
     const pageNumberLimit = 3;
@@ -430,7 +500,32 @@ class MainContainer extends React.Component {
         </DropdownMenuList>
       );
     };
-
+    const DropdownMenuData = (selected) => {
+      return (
+        <DropdownMenuList
+          className="DropdownMenuList"
+          initial={{ height: 0 }}
+          animate={
+            window.innerWidth < 1024 ? { height: "20.5vh" } : { height: "9vh" }
+          }
+          transition={{ type: "spring", duration: 0.3 }}
+        >
+          <div className="inputs">
+            <input
+              placeholder="From"
+              value={this.state.selectedData.start}
+              onChange={this.onChangeHandlerDataStart}
+            />
+            -
+            <input
+              placeholder="Before"
+              defaultValue={this.state.selectedData.end}
+              onChange={this.onChangeHandlerDataEnd}
+            />
+          </div>
+        </DropdownMenuList>
+      );
+    };
     return (
       <MainContainer>
         <Header>
@@ -443,7 +538,6 @@ class MainContainer extends React.Component {
           </LogoContainer>
           <FilterContainer>
             <input
-              // autoFocus="autoFocus"
               placeholder="Name"
               value={this.state.valueSearchName}
               onChange={this.onChangeHandler}
@@ -464,7 +558,7 @@ class MainContainer extends React.Component {
               )}
 
               {this.state.isActiveA === true ? (
-                <div style={{ zIndex: 10 }}>
+                <div>
                   {this.state.selectedAutor ? (
                     <BsX
                       color={this.props.theme.textRgba}
@@ -475,7 +569,7 @@ class MainContainer extends React.Component {
                   <BsCaretUpFill color={this.props.theme.textRgba} />
                 </div>
               ) : (
-                <div style={{ zIndex: 10 }}>
+                <div>
                   {this.state.selectedAutor ? (
                     <BsX
                       color={this.props.theme.textRgba}
@@ -539,9 +633,52 @@ class MainContainer extends React.Component {
                 />
               )}
             </div>
-            <div className="FilterContainer">
-              <h5>Created</h5>
-              <BsCaretDownFill color={this.props.theme.textRgba} />
+            <div
+              className={
+                this.state.isActiveC ? "openFilterContainer" : "FilterContainer"
+              }
+            >
+              {this.state.selectedData.start || this.state.selectedData.end ? (
+                <h5
+                  onClick={(e) =>
+                    this.setState({ isActiveC: !this.state.isActiveC })
+                  }
+                >
+                  {this.state.selectedData.start}-{this.state.selectedData.end}
+                </h5>
+              ) : (
+                <h5
+                  onClick={(e) =>
+                    this.setState({ isActiveC: !this.state.isActiveC })
+                  }
+                >
+                  Created
+                </h5>
+              )}
+              {this.state.isActiveC === true ? (
+                <div>
+                  {this.state.selectedData.start ||
+                  this.state.selectedData.end ? (
+                    <BsX
+                      color={this.props.theme.textRgba}
+                      onClick={deleteFilterC}
+                    />
+                  ) : null}
+                  <BsCaretUpFill color={this.props.theme.textRgba} />
+                </div>
+              ) : (
+                <div>
+                  {this.state.selectedData.start ||
+                  this.state.selectedData.end ? (
+                    <BsX
+                      color={this.props.theme.textRgba}
+                      onClick={deleteFilterC}
+                    />
+                  ) : null}
+                  <BsCaretDownFill color={this.props.theme.textRgba} />
+                </div>
+              )}
+              {this.state.isActiveC && DropdownMenuData()}
             </div>
           </FilterContainer>
         </Header>
@@ -566,7 +703,9 @@ class MainContainer extends React.Component {
         >
           <GalleryImages
             data={
-              this.state.valueSearchName
+              this.state.selectedData.start || this.state.selectedData.end
+                ? this.state.newData
+                : this.state.valueSearchName
                 ? searchData(this.state.data)
                 : this.state.data
             }
@@ -649,4 +788,4 @@ class MainContainer extends React.Component {
   }
 }
 
-export default MainContainer;
+export default MainContainerClass;

@@ -3,7 +3,8 @@ export const lightTheme = {
   text: "#000000",
   fontFamily: "'Source Sans Pro', sans-serif",
   bodyRgba: "rgb(0, 0, 0, 0.3)",
-  textRgba: "rgb(0, 0, 0, 0.3)"
+  textRgba: "rgb(0, 0, 0, 0.3)",
+  input: "#EFEFEF"
 };
 
 export const DarkTheme = {
@@ -11,5 +12,6 @@ export const DarkTheme = {
   text: "#FCF6F4",
   fontFamily: "'Source Sans Pro', sans-serif",
   textRgba: "rgb(255, 255, 255, 0.3)",
-  bodyRgba: "rgb(255, 255, 255)"
+  bodyRgba: "rgb(255, 255, 255)",
+  input: "#FFFFFF"
 };

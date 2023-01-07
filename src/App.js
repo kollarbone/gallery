@@ -6,7 +6,7 @@ import { AnimatePresence } from "framer-motion";
 
 import React, { useState } from "react";
 import { BrowserRouter } from "react-router-dom";
-import MainContainer from "./components/MainContainer";
+import MainContainerClass from "./components/MainContainer";
 
 export default function App(props) {
   const [theme, setTheme] = useState("light");
@@ -20,7 +20,7 @@ export default function App(props) {
       <ThemeProvider theme={theme === "light" ? lightTheme : DarkTheme}>
         <GlobalStyle />
         <AnimatePresence>
-          <MainContainer
+          <MainContainerClass
             toggleTheme={toggleTheme}
             theme={theme === "light" ? lightTheme : DarkTheme}
           />
