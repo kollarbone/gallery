@@ -322,7 +322,9 @@ class MainContainerClass extends React.Component {
       start: event.target.value,
       end: this.state.selectedData.end
     };
-    this.setState({ selectedData: NewDate });
+    this.setState({
+      selectedData: NewDate
+    });
     const newArr = [];
     this.state.data.map((i) => {
       if (i.created > event.target.value) {
@@ -344,7 +346,9 @@ class MainContainerClass extends React.Component {
       end: event.target.value,
       start: this.state.selectedData.start
     };
-    this.setState({ selectedData: NewDate });
+    this.setState({
+      selectedData: NewDate
+    });
     const newArr = [];
     this.state.data.map((i) => {
       if (
@@ -375,8 +379,7 @@ class MainContainerClass extends React.Component {
     };
     const onClickHandlerA = (e) => {
       this.setState({
-        selectedAutor: e.target.id,
-        selectedLocation: null
+        selectedAutor: e.target.id
       });
       this.state.autor.map((i) => {
         i.name === e.target.id &&
@@ -391,8 +394,7 @@ class MainContainerClass extends React.Component {
     };
     const onClickHandlerL = (e) => {
       this.setState({
-        selectedLocation: e.target.id,
-        selectedAutor: null
+        selectedLocation: e.target.id
       });
       this.state.location.map((i) => {
         i.location === e.target.id &&
@@ -407,8 +409,7 @@ class MainContainerClass extends React.Component {
     };
     const deleteFilterA = (id) => {
       this.setState({
-        selectedAutor: null,
-        isActiveA: false
+        selectedAutor: ""
       });
       axios
         .get(
@@ -682,17 +683,6 @@ class MainContainerClass extends React.Component {
             </div>
           </FilterContainer>
         </Header>
-
-        {/* {data && valueSearchName
-          ? searchData(data)
-          : // : data && selectedAutor
-            // ? selectedAutorData(data)
-            data && currentData(data)} */}
-        {/* <GalleryImages
-        data={valueSearchName ? searchData(data) : data}
-        autor={props.autor}
-        theme={props.theme}
-      /> */}
         <MainBlock
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
