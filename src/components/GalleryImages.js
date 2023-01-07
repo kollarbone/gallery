@@ -109,6 +109,7 @@ class MainContainer extends React.Component {
                     if (a.id === i.authorId) {
                       return a.name;
                     }
+                    return null;
                   })}
                 </span>
                 <span>
@@ -120,6 +121,7 @@ class MainContainer extends React.Component {
                     if (a.id === i.locationId) {
                       return a.location;
                     }
+                    return null;
                   })}
                 </span>
               </div>

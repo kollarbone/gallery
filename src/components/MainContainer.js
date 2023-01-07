@@ -323,11 +323,12 @@ class MainContainerClass extends React.Component {
           this.state.selectedData.end &&
           i.created < this.state.selectedData.end
         ) {
-          newArr.push(i);
+          return newArr.push(i);
         } else {
-          newArr.push(i);
+          return newArr.push(i);
         }
       }
+      return null;
     });
     this.setState({ newData: newArr });
   };
@@ -347,8 +348,9 @@ class MainContainerClass extends React.Component {
           ? i.created > this.state.selectedData.start
           : ""
       ) {
-        newArr.push(i);
+        return newArr.push(i);
       }
+      return null;
     });
     this.setState({ newData: newArr });
   };
@@ -391,6 +393,7 @@ class MainContainerClass extends React.Component {
             .then((response) => {
               this.setState({ data: response.data });
             });
+        return this.state.data;
       });
     };
     const onClickHandlerL = (e) => {
@@ -406,6 +409,7 @@ class MainContainerClass extends React.Component {
             .then((response) => {
               this.setState({ data: response.data });
             });
+        return this.state.data;
       });
     };
     const deleteFilterA = (id) => {
