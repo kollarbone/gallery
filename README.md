@@ -1,2 +1,1 @@
-# gallery
-Created with CodeSandbox
+
