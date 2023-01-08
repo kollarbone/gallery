@@ -66,6 +66,8 @@ const FilterContainer = styled.div`
     min-width: 150px;
     max-width: 280px;
     width: 100%;
+    height: 15px;
+    flex-wrap: nowrap;
     border: 1px solid ${(props) => props.theme.bodyRgba};
     border-radius: 8px;
     padding: 14px;
@@ -77,8 +79,8 @@ const FilterContainer = styled.div`
     margin-bottom: 15px;
     margin-left: 10px;
     margin-right: 10px;
-    flex-wrap: wrap;
     transition: all 0.2s ease-in-out;
+
     :first-child {
       margin-left: 0px;
     }
@@ -89,6 +91,17 @@ const FilterContainer = styled.div`
     :hover,
     :focus {
       outline: none;
+    }
+    span {
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      font-weight: 400;
+      font-size: 13px;
+      color: ${(props) => props.theme.text};
+    }
+    div {
+      display: flex;
     }
   }
   .openFilterContainer {
@@ -231,7 +244,7 @@ const DropdownMenuList = styled(motion.div)`
     justify-content: center;
     margin-top: 20px;
     margin: 10px;
-    @media (max-width: 1024px) {
+    @media (max-width: 1024px) and (min-width: 768px) {
       flex-direction: column;
       align-items: center;
     }
@@ -241,6 +254,9 @@ const DropdownMenuList = styled(motion.div)`
       max-width: 100px;
       min-width: 90px;
     }
+    span {
+      color: ${(props) => props.theme.text};
+    }
   }
 `;
 const List = styled.div`
@@ -249,6 +265,8 @@ const List = styled.div`
   padding-top: 10px;
   padding-bottom: 10px;
   overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
   :hover {
     transition: all 0.2s ease-in-out;
     color: ${(props) => props.theme.body};
@@ -260,8 +278,8 @@ const List = styled.div`
   span {
     font-weight: 500;
     font-size: 16px;
-    white-space: nowrap;
     transition: all 0.2s ease-in-out;
+    white-space: nowrap;
     text-overflow: ellipsis;
     cursor: pointer;
     margin-left: 30px;
@@ -512,7 +530,9 @@ class MainContainerClass extends React.Component {
           className="DropdownMenuList"
           initial={{ height: 0 }}
           animate={
-            window.innerWidth < 1024 ? { height: "20.5vh" } : { height: "9vh" }
+            window.innerWidth < 1024 && window.innerWidth > 768
+              ? { height: "20.5vh" }
+              : { height: "10vh" }
           }
           transition={{ type: "spring", duration: 0.3 }}
         >
@@ -522,7 +542,7 @@ class MainContainerClass extends React.Component {
               value={this.state.selectedData.start}
               onChange={this.onChangeHandlerDataStart}
             />
-            -
+            <span>-</span>
             <input
               placeholder="Before"
               defaultValue={this.state.selectedData.end}
@@ -532,6 +552,7 @@ class MainContainerClass extends React.Component {
         </DropdownMenuList>
       );
     };
+
     return (
       <MainContainer>
         <Header>
@@ -558,7 +579,7 @@ class MainContainerClass extends React.Component {
               }
             >
               {this.state.selectedAutor ? (
-                <h5>{this.state.selectedAutor}</h5>
+                <span>{this.state.selectedAutor}</span>
               ) : (
                 <h5>Author</h5>
               )}
@@ -604,7 +625,7 @@ class MainContainerClass extends React.Component {
               }
             >
               {this.state.selectedLocation ? (
-                <h5>{this.state.selectedLocation}</h5>
+                <span>{this.state.selectedLocation}</span>
               ) : (
                 <h5>Location</h5>
               )}
