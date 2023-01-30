@@ -1,98 +1,9 @@
 import React from "react";
 import styled from "styled-components";
+import { MainBlock, NameArt } from "./StylesMain";
 
 class MainContainer extends React.Component {
   render() {
-    const MainBlock = styled.div`
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      margin-bottom: 20px;
-      flex-wrap: wrap;
-      justify-content: center;
-      width: 100%;
-    `;
-    const NameArt = styled.div`
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      position: relative;
-      cursor: pointer;
-      transition: all 0.2s ease-in-out;
-      .hide {
-        position: absolute;
-        white-space: nowrap;
-        overflow: hidden;
-        text-overflow: ellipsis;
-        background: rgba(255, 255, 255, 0.75);
-        bottom: 10px;
-        display: flex;
-        flex-direction: column;
-        min-height: 30px;
-        align-items: flex-start;
-        max-width: 360px;
-        min-width: 280px;
-        height: 30px;
-        width: 100vw;
-        border-radius: 0px 0px 20px 20px;
-        justify-content: center;
-        transition: all 0.2s ease-in-out;
-        h4 {
-          visibility: hidden;
-          display: none;
-        }
-        span {
-          visibility: hidden;
-          display: none;
-        }
-        h3 {
-          margin-left: 15px;
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          margin-right: 15px;
-        }
-      }
-      .hide:hover {
-        height: 145px;
-        bottom: 10px;
-        transition: all 0.2s ease-in-out;
-        h4 {
-          display: flex;
-          visibility: visible;
-          font-weight: 600;
-          margin-left: 15px;
-          margin-bottom: 5px;
-          margin-right: 5px;
-          color: #000;
-        }
-        span {
-          visibility: visible;
-          font-weight: 300;
-          font-size: 13px;
-          display: flex;
-        }
-        h3 {
-          margin-left: 15px;
-          white-space: normal;
-          overflow: hidden;
-          text-overflow: ellipsis;
-          margin-right: 15px;
-          margin-bottom: 5px;
-        }
-      }
-      img {
-        max-width: 360px;
-        border-radius: 20px;
-        max-height: 275px;
-        min-width: 280px;
-        min-height: 205px;
-        margin: 10px;
-        width: 100vw;
-        height: 100vw;
-      }
-    `;
     const imageUrl = "https://test-front.framework.team";
 
     return (

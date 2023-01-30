@@ -13,278 +13,15 @@ import {
 } from "react-icons/bs";
 import { BsCaretDownFill, BsCaretUpFill } from "react-icons/bs";
 import GalleryImages from "./GalleryImages";
-
-const MainContainer = styled.div`
-  max-width: 1160px;
-  min-width: 300px;
-  margin-left: auto;
-  margin-right: auto;
-  height: fit-content;
-  position: relative;
-  display: grid;
-  grid-template-columns: 1;
-  grid-template-rows: 3;
-  h2,
-  h4,
-  h5,
-  h6 {
-    font-family: "Karla", sans-serif;
-    font-weight: 500;
-    color: ${(props) => props.theme.text};
-  }
-  h3 {
-    font-weight: 700;
-    font-family: "Karla", sans-serif;
-  }
-  @media (max-width: 790px) {
-    justify-items: center;
-  }
-`;
-const Header = styled.div`
-  margin-top: 30px;
-  height: fit-content;
-  display: flex;
-  flex-direction: column;
-  margin-bottom: 30px;
-  justify-content: center;
-`;
-const LogoContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 35px;
-`;
-const FilterContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-  .FilterContainer,
-  input {
-    position: relative;
-    cursor: pointer;
-    min-width: 150px;
-    max-width: 280px;
-    width: 100%;
-    height: 15px;
-    flex-wrap: nowrap;
-    border: 1px solid ${(props) => props.theme.bodyRgba};
-    border-radius: 8px;
-    padding: 14px;
-    background: ${(props) => props.theme.body};
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    margin-left: 10px;
-    margin-right: 10px;
-    transition: all 0.2s ease-in-out;
-
-    :first-child {
-      margin-left: 0px;
-    }
-    :last-child {
-      margin-right: 0px;
-    }
-    :active,
-    :hover,
-    :focus {
-      outline: none;
-    }
-    span {
-      overflow: hidden;
-      white-space: nowrap;
-      text-overflow: ellipsis;
-      font-weight: 400;
-      font-size: 13px;
-      color: ${(props) => props.theme.text};
-    }
-    div {
-      display: flex;
-    }
-  }
-  .openFilterContainer {
-    border-radius: 8px 8px 0px 0px !important;
-    position: relative;
-    cursor: pointer;
-    min-width: 150px;
-    max-width: 280px;
-    width: 100%;
-    border: 1px solid ${(props) => props.theme.bodyRgba};
-    padding: 14px;
-    background: ${(props) => props.theme.body};
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 15px;
-    margin-left: 10px;
-    margin-right: 10px;
-    flex-wrap: wrap;
-    transition: all 0.2s ease-in-out;
-    :first-child {
-      margin-left: 0px;
-    }
-    :last-child {
-      margin-right: 0px;
-    }
-  }
-  @media (max-width: 790px) {
-    justify-content: center;
-    flex-direction: column;
-    .FilterContainer,
-    input {
-      width: 280px;
-
-      :first-child {
-        margin-left: 10px;
-      }
-      :last-child {
-        margin-right: 10px;
-      }
-    }
-    .openFilterContainer {
-      width: 280px;
-      :first-child {
-        margin-left: 10px;
-      }
-      :last-child {
-        margin-right: 10px;
-      }
-    }
-  }
-`;
-const Paggination = styled.div`
-  list-style: none;
-  display: flex;
-  align-items: center;
-  margin-bottom: 10px;
-  margin-left: 20px;
-  cursor: pointer;
-  transition: all 0.2s ease-in-out;
-  li {
-    padding: 10px;
-    border: 1px solid ${(props) => props.theme.text};
-    height: 20px;
-    text-align: center;
-    width: 20px;
-    color: ${(props) => props.theme.text};
-  }
-  .active {
-    background-color: ${(props) => props.theme.text};
-    color: ${(props) => props.theme.body};
-    transition: all 0.2s ease-in-out;
-  }
-  .active:hover {
-    background-color: ${(props) => props.theme.text};
-    color: ${(props) => props.theme.body};
-  }
-  button {
-    background: none;
-    padding: 10px;
-    border: 1px solid ${(props) => props.theme.text};
-    height: 42px;
-    text-align: center;
-    width: 41px;
-    color: ${(props) => props.theme.text};
-  }
-  li:hover {
-    background-color: ${(props) => props.theme.textRgba};
-    transition: all 0.2s ease-in-out;
-  }
-  button:hover {
-    background-color: ${(props) => props.theme.textRgba};
-    transition: all 0.2s ease-in-out;
-  }
-  .first {
-    border: 1px solid ${(props) => props.theme.textRgba};
-  }
-  .last {
-    border: 1px solid ${(props) => props.theme.textRgba};
-  }
-  .first:hover {
-    background-color: ${(props) => props.theme.body};
-  }
-  .last:hover {
-    background-color: ${(props) => props.theme.body};
-  }
-`;
-const DropdownMenuList = styled(motion.div)`
-  transition: all 0.2s ease-in-out;
-  position: absolute;
-  box-sizing: border-box;
-  width: 100.55%;
-  z-index: 1;
-  left: -1px;
-  right: 0px;
-  top: 44px;
-  background: ${(props) => props.theme.body};
-  border: 1px solid ${(props) => props.theme.bodyRgba};
-  border-radius: 0px 0px 8px 8px;
-  overflow: auto;
-  max-height: 205px;
-
-  ::-webkit-scrollbar {
-    width: 15px;
-  }
-  ::-webkit-scrollbar-track {
-    background: ${(props) => props.theme.body};
-  }
-  ::-webkit-scrollbar-thumb {
-    background-color: ${(props) => props.theme.bodyRgba};
-    border-radius: 10px;
-    border: 3px solid ${(props) => props.theme.body};
-  }
-
-  .inputs {
-    display: flex;
-    flex-direction: row;
-    align-items: baseline;
-    justify-content: center;
-    margin-top: 20px;
-    margin: 10px;
-    @media (max-width: 1024px) and (min-width: 768px) {
-      flex-direction: column;
-      align-items: center;
-    }
-    input {
-      border: none;
-      background: ${(props) => props.theme.input};
-      max-width: 100px;
-      min-width: 90px;
-    }
-    span {
-      color: ${(props) => props.theme.text};
-    }
-  }
-`;
-const List = styled.div`
-  color: ${(props) => props.theme.text};
-  transition: all 0.2s ease-in-out;
-  padding-top: 10px;
-  padding-bottom: 10px;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  :hover {
-    transition: all 0.2s ease-in-out;
-    color: ${(props) => props.theme.body};
-    background: ${(props) => props.theme.text};
-  }
-  :last-child {
-    margin-bottom: 15px;
-  }
-  span {
-    font-weight: 500;
-    font-size: 16px;
-    transition: all 0.2s ease-in-out;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-    cursor: pointer;
-    margin-left: 30px;
-  }
-`;
+import {
+  MainContainer,
+  Header,
+  LogoContainer,
+  FilterContainer,
+  DropdownMenuList,
+  List,
+  Paggination
+} from "./StylesMain";
 
 class MainContainerClass extends React.Component {
   constructor(props) {
@@ -302,26 +39,26 @@ class MainContainerClass extends React.Component {
       isActiveL: false,
       selectedLocation: "",
       selectedData: { start: "", end: "" },
-      isActiveC: false
+      isActiveC: false,
+      link: "https://test-front.framework.team/"
     };
   }
   componentDidMount() {
     axios
       .get(
-        "https://test-front.framework.team/paintings?_limit=12&_page=" +
+        [this.state.link] +
+          "paintings?_limit=12&_page=" +
           [this.state.currentPage]
       )
       .then((response) => {
         this.setState({ data: response.data });
       });
-    axios.get("https://test-front.framework.team/authors").then((response) => {
+    axios.get([this.state.link] + "authors").then((response) => {
       this.setState({ autor: response.data });
     });
-    axios
-      .get("https://test-front.framework.team/locations")
-      .then((response) => {
-        this.setState({ location: response.data });
-      });
+    axios.get([this.state.link] + "locations").then((response) => {
+      this.setState({ location: response.data });
+    });
   }
   onChangeHandler = (event) => {
     this.setState({ valueSearchName: event.target.value });
@@ -372,7 +109,6 @@ class MainContainerClass extends React.Component {
     });
     this.setState({ newData: newArr });
   };
-
   render() {
     const MainBlock = styled(motion.div)`
       display: flex;
@@ -552,7 +288,6 @@ class MainContainerClass extends React.Component {
         </DropdownMenuList>
       );
     };
-
     return (
       <MainContainer>
         <Header>
@@ -569,7 +304,6 @@ class MainContainerClass extends React.Component {
               value={this.state.valueSearchName}
               onChange={this.onChangeHandler}
             />
-
             <div
               onClick={(e) =>
                 this.setState({ isActiveA: !this.state.isActiveA })
@@ -583,7 +317,6 @@ class MainContainerClass extends React.Component {
               ) : (
                 <h5>Author</h5>
               )}
-
               {this.state.isActiveA === true ? (
                 <div>
                   {this.state.selectedAutor ? (
@@ -606,7 +339,6 @@ class MainContainerClass extends React.Component {
                   <BsCaretDownFill color={this.props.theme.textRgba} />
                 </div>
               )}
-
               {this.state.isActiveA && (
                 <DropdownMenu
                   selected={this.state.selectedAutor}
@@ -650,7 +382,6 @@ class MainContainerClass extends React.Component {
                   <BsCaretDownFill color={this.props.theme.textRgba} />
                 </div>
               )}
-
               {this.state.isActiveL && (
                 <DropdownMenu
                   selected={this.state.selectedLocation}
